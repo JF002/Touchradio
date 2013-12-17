@@ -12,18 +12,20 @@
 #include <QHostAddress>
 #include <QDebug>
 #include "monitor.h"
+#include "applicationsettings.h"
 
 int main(int argc, char *argv[])
 {
     QGuiApplication app(argc, argv);
+    ApplicationSettings settings;
     QQuickView viewer;
-
     LMSConnector connector;
-    connector.connect(QHostAddress("192.168.0.7"), 9090);
+
+    connector.connect(settings.GetLmsAddress(), settings.GetLmsPort());
     connector.BindToPlayer(0);
 
     LmsStatus status;
-    LMSStatusThread statusManager(QHostAddress("192.168.0.7"), 0, &status);
+    LMSStatusThread statusManager(settings.GetLmsAddress(), settings.GetLmsPort(), &status);
     statusManager.Start();
 
     LmsPlayerController playerController(&connector);

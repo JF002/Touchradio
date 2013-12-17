@@ -23,7 +23,8 @@ SOURCES += main.cpp \
     lmsstatusthread.cpp \
     favoriteitem.cpp \
     lmsplayercontroller.cpp \
-    monitor.cpp
+    monitor.cpp \
+    applicationsettings.cpp
 
 # Installation path
 # target.path =
@@ -43,7 +44,8 @@ HEADERS += \
     lmsstatusthread.h \
     favoriteitem.h \
     lmsplayercontroller.h \
-    monitor.h
+    monitor.h \
+    applicationsettings.h
 
 RESOURCES += \
     ressources.qrc
