@@ -216,6 +216,7 @@ QString LmsStatus::GetCurrentTrackCoverId()
 
 QString LmsStatus::GetCurrentTrackCoverUrl()
 {
+    // TODO Get the URL from the server, do not use these constants
     if(currentTrackCoverId == QString::null)
         return "http://192.168.0.7:9000/music/0/cover_150x150_o";
     else

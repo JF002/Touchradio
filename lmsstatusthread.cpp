@@ -1,12 +1,11 @@
 #include "lmsstatusthread.h"
 
-LMSStatusThread::LMSStatusThread(QHostAddress address, int playerId, LmsStatus* status) : QObject()
+LMSStatusThread::LMSStatusThread(LMSConnector* connector, LmsStatus* status) : QObject()
 {
-    isRunning = false;
+    this->connector = connector;
     this->status = status;
-    this->address = address;
     this->moveToThread(&thread);
-
+    connector->moveToThread(&thread);
     this->connect(&thread, SIGNAL(started()), SLOT(run()));
 }
 
@@ -18,13 +17,9 @@ void LMSStatusThread::Start()
 
 void LMSStatusThread::run()
 {
-    connector.connect(address, 9090);
-    connector.BindToPlayer(0);
-
-
     while(isRunning)
     {
-        QString answer = connector.GetStatus();
+        QString answer = connector->GetStatus();
         status->Update(answer);
         QThread::msleep(500);
     }

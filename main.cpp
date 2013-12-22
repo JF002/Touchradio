@@ -20,12 +20,28 @@ int main(int argc, char *argv[])
     ApplicationSettings settings;
     QQuickView viewer;
     LMSConnector connector;
-
-    connector.connect(settings.GetLmsAddress(), settings.GetLmsPort());
-    connector.BindToPlayer(0);
-
+    LMSConnector statusConnector;
     LmsStatus status;
-    LMSStatusThread statusManager(settings.GetLmsAddress(), settings.GetLmsPort(), &status);
+    bool connected;
+
+    connected = connector.connect(settings.GetLmsAddress(), settings.GetLmsPort());
+    if(!connected)
+    {
+        qDebug() << "Cannot connector to " << settings.GetLmsAddress() << ":" << QString::number(settings.GetLmsPort());
+        return -1;
+    }
+    connected = statusConnector.connect(settings.GetLmsAddress(), settings.GetLmsPort());
+    if(!connected)
+    {
+        qDebug() << "Cannot connector to " << settings.GetLmsAddress() << ":" << QString::number(settings.GetLmsPort());
+        return -1;
+    }
+
+    connector.BindToPlayer(0);
+    statusConnector.BindToPlayer(0);
+
+
+    LMSStatusThread statusManager(&statusConnector, &status);
     statusManager.Start();
 
     LmsPlayerController playerController(&connector);

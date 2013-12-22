@@ -24,7 +24,9 @@ SOURCES += main.cpp \
     favoriteitem.cpp \
     lmsplayercontroller.cpp \
     monitor.cpp \
-    applicationsettings.cpp
+    applicationsettings.cpp \
+    Exceptions/exception.cpp \
+    Exceptions/timeoutexception.cpp
 
 # Installation path
 # target.path =
@@ -45,7 +47,9 @@ HEADERS += \
     favoriteitem.h \
     lmsplayercontroller.h \
     monitor.h \
-    applicationsettings.h
+    applicationsettings.h \
+    Exceptions/exception.h \
+    Exceptions/timeoutexception.h
 
 RESOURCES += \
     ressources.qrc

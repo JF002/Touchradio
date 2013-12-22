@@ -37,7 +37,7 @@ void FavoriteItem::SetUrl(QString url)
 
 QString FavoriteItem::GetCoverUrl()
 {
-    return "http://192.168.0.7:9000/html/images/radio.png";
+    return m_connector->GetRadioCoverUrl();
 }
 
 void FavoriteItem::SetCoverUrl(QString coverUrl)

@@ -56,9 +56,9 @@ QString TrackItem::GetCoverUrl()
 {
     GetDetailedInfo();
     if(m_coverId == QString::null)
-        return "http://192.168.0.7:9000/music/0/cover_150x150_o";
+        return connector->GetUnknownCoverUrl();
     else
-        return "http://192.168.0.7:9000/music/" + m_coverId + "/cover.jpg";
+        return connector->GetCoverUrl(m_coverId);
 }
 
 double TrackItem::GetDuration()

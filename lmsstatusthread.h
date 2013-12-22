@@ -12,20 +12,16 @@ class LMSStatusThread : public QObject
 {
     Q_OBJECT
 public:
-    LMSStatusThread(QHostAddress address, int playerId, LmsStatus* status);
+    LMSStatusThread(LMSConnector* connector, LmsStatus* status);
     void Start();
 
 private slots:
     void run();
 
 private:
-    QHostAddress address;
-
     bool isRunning;
-
-    LMSConnector connector;
+    LMSConnector* connector;
     LmsStatus* status;
-
     QThread thread;
 };
 

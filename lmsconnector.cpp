@@ -4,9 +4,11 @@
 #include <QTcpSocket>
 #include <QAbstractSocket>
 #include <QUrl>
+#include <QtDebug>
 
 #include "artistitem.h"
 #include "favoriteitem.h"
+#include "Exceptions/timeoutException.h"
 
 LMSConnector::LMSConnector() : QObject(NULL)
 {
@@ -14,9 +16,6 @@ LMSConnector::LMSConnector() : QObject(NULL)
     QObject::connect(this->socket, &QTcpSocket::readyRead, this, &LMSConnector::dataReceived);
     QObject::connect(this->socket, SIGNAL(error(QAbstractSocket::SocketError)),
                      this, SLOT(socketError(QAbstractSocket::SocketError)));
-
-
-
 }
 
 LMSConnector::LMSConnector(QObject* parent):   QObject(parent)
@@ -25,45 +24,59 @@ LMSConnector::LMSConnector(QObject* parent):   QObject(parent)
     QObject::connect(this->socket, &QTcpSocket::readyRead, this, &LMSConnector::dataReceived);
     QObject::connect(this->socket, SIGNAL(error(QAbstractSocket::SocketError)),
                      this, SLOT(socketError(QAbstractSocket::SocketError)));
-
-
 }
 
+void LMSConnector::moveToThread(QThread *thread)
+{
+    ((QObject*)this)->moveToThread(thread);
+    socket->moveToThread(thread);
+}
+
+
+/* Get the ID (MAC address) of the player identified by index
+ * @param index Index of the player
+ * @return The Identifier of the player */
 QString LMSConnector::ReadPlayerId(int index)
 {
-    QString id;
-    QString answer = this->request(QString("player id %1 ?").arg(index));
+    /* Request : "player id 0 ?"
+     * Answer : "player id 0 9f:83:74:25:3e:5c"
+     */
 
-    if(answer.startsWith(QString("player id %1").arg(index)))
+    QString id;
+    QString request = "player id %1";
+    QString answer = this->request(QString(request + " ?").arg(index));
+
+    if(answer.startsWith(request.arg(index)))
     {
-        id = answer.section(" ",3,3);
+        id = answer.remove(0, request.length()).trimmed();
     }
     else
     {
         id = QString("");
     }
 
-
     return id;
 }
 
-void LMSConnector::connect(const QHostAddress & address, quint16 port)
+bool LMSConnector::connect(const QHostAddress & address, quint16 port)
 {
     bool connected = false;
     int retries = 60;
+    this->address = address;
+
 
     while(!connected && retries > 0)
     {
         socket->connectToHost(address, port);
-        connected = socket->waitForConnected(200);
+        connected = socket->waitForConnected(1000);
         if(!connected)
         {
-            socket->close();
+            qWarning() << "Error : " << socket->error();
             QThread::msleep(1000);
         }
-        qDebug() << "Connection : " << connected;
         retries--;
     }
+    return connected;
 
 }
 
@@ -72,16 +85,28 @@ void LMSConnector::BindToPlayer(int index)
     this->playerId = ReadPlayerId(index);
 }
 
+/* Get a string from the server describing its status.
+ * This string is intended to be handled by a LmsStatus object */
 QString LMSConnector::GetStatus()
 {
+    /* Request : "xx:xx:xx:xx:xx:xx status - 1 tags:alcjK"
+     * Response :
+     *      player_name:SoftSqueeze player_connected:1 player_ip:192.168.0.2:62698
+     *      power:1 signalstrength:0 mode:play remote:1 current_title: - Lazy Bones
+     *      time:2209.14036511421 rate:1 mixer volume:73 playlist repeat:0 playlist
+     *      shuffle:0 playlist mode:off seq_no:0 playlist_cur_index:0 playlist_timestamp:1387747708.53505
+     *      playlist_tracks:1 remoteMeta:HASH(0x47838c0) playlist index:0 id:-73516576 title:Lazy Bones
+     *      coverid:-73516576 coverart:0 */
     QString request = QString("%1 status - 1 tags:alcjK").arg(this->playerId);
     QString answer = this->request(request);
     answer = answer.mid(request.count());
     return answer;
 }
 
+/* Returns the version of the LMS server */
 QString LMSConnector::GetVersion()
 {
+    qDebug() << this->request("version ?");
     return this->request("version ?");
 }
 
@@ -384,10 +409,25 @@ void LMSConnector::SetVolume(int volume)
     QString answer = this->request(QString("%1 mixer volume %2").arg(pid, QString::number(volume)));
 }
 
+QString LMSConnector::GetUnknownCoverUrl()
+{
+    return "http://" + address.toString() + ":9000/music/0/cover_150x150_o";
+}
+
+QString LMSConnector::GetCoverUrl(QString& coverId)
+{
+    return "http://" + address.toString() + ":9000/music/" + coverId + "/cover.jpg";
+}
+
 QString LMSConnector::request(QString message)
 {
     this->write(message);
     return this->read();
+}
+
+QString LMSConnector::GetRadioCoverUrl()
+{
+    return "http://" + address.toString() + ":9000/html/images/radio.png";
 }
 
 void LMSConnector::write(QString message)

@@ -2,6 +2,7 @@
 #define LMSCONNECTOR_H
 
 #include <QTcpSocket>
+#include <QHostAddress>
 #include "artistitem.h"
 #include "albumitem.h"
 #include "trackitem.h"
@@ -21,7 +22,7 @@ public:
     LMSConnector();
     LMSConnector(QObject* parent);
 
-    void connect(const QHostAddress & address, quint16 port);
+    bool connect(const QHostAddress & address, quint16 port);
 
     QString GetVersion();
     int GetArtistNumber();
@@ -48,6 +49,12 @@ public:
 
     void FillTrackInfo(TrackItem* track);
 
+    virtual void moveToThread(QThread *thread);
+
+    QString GetUnknownCoverUrl();
+    QString GetCoverUrl(QString& coverId);
+    QString GetRadioCoverUrl();
+
 protected:
     void write(QString message);
     QString read();
@@ -65,6 +72,7 @@ private slots:
 private:
     QTcpSocket* socket;
     QString playerId;
+    QHostAddress address;
 };
 
 #endif // LMSCONNECTOR_H
