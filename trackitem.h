@@ -19,6 +19,7 @@ class TrackItem : public RessourceItem
 public:
     TrackItem();
     TrackItem(LMSConnector* connector, int albumId, int tracknum, const QString trackName, int trackId);
+    TrackItem(LMSConnector* connector, QMap<QString, QString> tokens);
     int GetAlbumId();
     int GetTrackId();
     QString GetTrackTitle();

@@ -14,6 +14,19 @@ ArtistItem::ArtistItem(LMSConnector* connector, const QString artistName, int ar
     this->m_type = Artist;
 }
 
+ArtistItem::ArtistItem(LMSConnector* connector, QMap<QString, QString> tokens) : RessourceItem("")
+{
+    this->connector = connector;
+    m_type = RessourceItem::Artist;
+
+    if(tokens.contains("id"))
+    {
+        this->m_artistId = tokens["id"].toInt();
+    }
+    if(tokens.contains("artist"))
+        this->m_title = tokens["artist"];
+}
+
 QString ArtistItem::toString() const
  {
     return m_artistId + "-" + m_title;

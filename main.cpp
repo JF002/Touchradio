@@ -16,6 +16,47 @@
 
 int main(int argc, char *argv[])
 {
+    /*
+     *player_name:SoftSqueeze player_connected:1 player_ip:192.168.0.2:62698
+     *      power:1 signalstrength:0 mode:play remote:1 current_title: - Lazy Bones
+     *      time:2209.14036511421 rate:1 mixer volume:73 playlist repeat:0 playlist
+     *      shuffle:0 playlist mode:off seq_no:0 playlist_cur_index:0 playlist_timestamp:1387747708.53505
+     *      playlist_tracks:1 remoteMeta:HASH(0x47838c0) playlist index:0 id:-73516576 title:Lazy Bones
+     *      coverid:-73516576
+     **/
+/*
+    QString response = " player_name:SoftSqueeze player_connected:1 player_ip:192.168.0.2:62698 power:1 signalstrength:0 mode:play remote:1 current_title: - Lazy Bones time:2209.14036511421 rate:1 mixer volume:73 playlist repeat:0 playlist shuffle:0 playlist mode:off seq_no:0 playlist_cur_index:0 playlist_timestamp:1387747708.53505  playlist_tracks:1 remoteMeta:HASH(0x47838c0) playlist index:0 id:-73516576 title:Lazy Bones coverid:-73516576";
+    QList<QString> knownKeys;
+    knownKeys.append("player_name");
+    knownKeys.append("player_connected");
+    knownKeys.append("mode");
+    knownKeys.append("playlist index");
+    knownKeys.append("title");
+    knownKeys.append("azertyuiop");
+
+
+    QString currentKey;
+    QMap<QString, QString> values;
+    foreach(currentKey, knownKeys)
+    {
+        int keyIndex = response.indexOf(" " + currentKey, 0, Qt::CaseSensitive);
+        if(keyIndex == -1)
+            continue;
+
+        keyIndex+=currentKey.count()+2;
+
+        int nextIndex = response.indexOf(":", keyIndex);
+        nextIndex = response.lastIndexOf(" ", nextIndex);
+
+        QString token = response.mid(keyIndex, nextIndex- keyIndex);
+        values[currentKey] = token;
+    }
+
+    qDebug() << values;
+
+*/
+
+
     QGuiApplication app(argc, argv);
     ApplicationSettings settings;
     QQuickView viewer;
@@ -88,6 +129,7 @@ int main(int argc, char *argv[])
 
     viewer.show();
     return app.exec();
+
 }
 
 

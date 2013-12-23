@@ -19,8 +19,7 @@ class LMSConnector : public QObject
 {
     Q_OBJECT
 public:
-    LMSConnector();
-    LMSConnector(QObject* parent);
+    LMSConnector(QObject* parent = NULL);
 
     bool connect(const QHostAddress & address, quint16 port);
 
@@ -47,8 +46,6 @@ public:
 
     void SetVolume(int volume);
 
-    void FillTrackInfo(TrackItem* track);
-
     virtual void moveToThread(QThread *thread);
 
     QString GetUnknownCoverUrl();
@@ -60,6 +57,8 @@ protected:
     QString read();
     QString request(QString message);
     QString ReadPlayerId(int index);
+
+    QMap<QString, QString> ParseAnswer(QString response, QList<QString> knownKeys);
 
 
 
@@ -73,6 +72,11 @@ private:
     QTcpSocket* socket;
     QString playerId;
     QHostAddress address;
+
+    QList<QString> trackKeys;
+    QList<QString> favoriteKeys;
+    QList<QString> artistKeys;
+    QList<QString> albumKeys;
 };
 
 #endif // LMSCONNECTOR_H

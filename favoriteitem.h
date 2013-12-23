@@ -11,6 +11,7 @@ class FavoriteItem : public RessourceItem
 public:
     FavoriteItem();
     FavoriteItem(LMSConnector* connector, const QString& favoriteName, const QString& favoriteId);
+    FavoriteItem(LMSConnector* connector, QMap<QString, QString> tokens);
 
     RessourceItem::ItemTypes GetItemType();
     void Play();

@@ -14,6 +14,20 @@ FavoriteItem::FavoriteItem(LMSConnector* connector, const QString& favoriteName,
     m_type = RessourceItem::Favorite;
 }
 
+
+FavoriteItem::FavoriteItem(LMSConnector* connector, QMap<QString, QString> tokens) : RessourceItem("")
+{
+    m_connector = connector;
+    m_type = RessourceItem::Favorite;
+
+    if(tokens.contains("id"))
+        this->m_favoriteId = tokens["id"];
+    if(tokens.contains("name"))
+        this->m_title = tokens["name"];
+    if(tokens.contains("url"))
+        this->m_url = tokens["url"];
+}
+
 RessourceItem::ItemTypes FavoriteItem::GetItemType()
 {
     return m_type;

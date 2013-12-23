@@ -11,6 +11,7 @@ class ArtistItem : public RessourceItem
 public:
     ArtistItem();
     ArtistItem(LMSConnector* connector, const QString artistName, int artistId);
+    ArtistItem(LMSConnector* connector, QMap<QString, QString> tokens);
 
     int GetArtistId();
 

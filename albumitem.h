@@ -16,6 +16,7 @@ class AlbumItem : public RessourceItem
 public:
     AlbumItem();
     AlbumItem(LMSConnector* connector, int artistId, const QString albumName, int albumId);
+    AlbumItem(LMSConnector* connector, QMap<QString, QString> tokens);
 
     int GetAlbumId();
     int GetArtistId();

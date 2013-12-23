@@ -24,6 +24,35 @@ TrackItem::TrackItem(LMSConnector* connector, int albumId, int trackNum, const Q
     m_coverId = QString::null;
 }
 
+TrackItem::TrackItem(LMSConnector* connector, QMap<QString, QString> tokens) : RessourceItem("")
+{
+    this->connector = connector;
+    this->m_type = Track;
+
+    if(tokens.contains("id"))
+        m_trackId = tokens["id"].toInt();
+    if(tokens.contains("title"))
+    {
+        m_trackName = tokens["title"];
+        m_title = m_trackName; // TODO remove redundancy between parent and children
+    }
+    /*if(tokens.contains("genre"))*/
+    if(tokens.contains("artist"))
+        m_artistName = tokens["artist"];
+    if(tokens.contains("album_id"))
+        m_albumId = tokens["album_id"].toInt();
+    if(tokens.contains("album"))
+        m_albumName = tokens["album"];
+    if(tokens.contains("duration"))
+        m_duration = tokens["duration"].toDouble();
+    if(tokens.contains("tracknum"))
+        m_trackNum = tokens["tracknum"].toInt();
+    if(tokens.contains("year"))
+        m_year = tokens["year"].toInt();
+    if(tokens.contains("coverid"))
+        m_coverId = tokens["coverid"];
+}
+
 
 QString TrackItem::toString() const
  {

@@ -19,6 +19,35 @@ AlbumItem::AlbumItem(LMSConnector* connector, int artistId, const QString albumN
     detailsInfoFilled = false;
 }
 
+AlbumItem::AlbumItem(LMSConnector* connector, QMap<QString, QString> tokens) : RessourceItem("")
+{
+    this->connector = connector;
+    m_type = RessourceItem::Album;
+
+    /*
+     *    albumKeys.append("id");
+    albumKeys.append("album");
+    albumKeys.append("year");
+    albumKeys.append("artwork_track_id");
+    albumKeys.append("artist");*/
+
+    if(tokens.contains("id"))
+        this->m_albumId = tokens["id"].toInt();
+    if(tokens.contains("artist"))
+        this->m_artistName = tokens["artist"];
+    if(tokens.contains("year"))
+        this->m_year = tokens["year"].toInt();
+    if(tokens.contains("artwork_track_id"))
+        this->m_coverId = tokens["artwork_track_id"];
+    if(tokens.contains("artist_id"))
+        this->m_artistId = tokens["artist_id"].toInt();
+    if(tokens.contains("album"))
+    {
+        this->m_albumName = tokens["album"];
+        this->m_title = this->m_albumName; // TODO remove redundancy
+    }
+}
+
 QString AlbumItem::toString() const
  {
     return QString(m_artistId) + "-" + QString(m_albumId) + "-" + m_albumName;

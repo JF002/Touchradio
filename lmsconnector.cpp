@@ -8,15 +8,7 @@
 
 #include "artistitem.h"
 #include "favoriteitem.h"
-#include "Exceptions/timeoutException.h"
-
-LMSConnector::LMSConnector() : QObject(NULL)
-{
-    socket = new QTcpSocket();
-    QObject::connect(this->socket, &QTcpSocket::readyRead, this, &LMSConnector::dataReceived);
-    QObject::connect(this->socket, SIGNAL(error(QAbstractSocket::SocketError)),
-                     this, SLOT(socketError(QAbstractSocket::SocketError)));
-}
+#include "Exceptions/timeoutexception.h"
 
 LMSConnector::LMSConnector(QObject* parent):   QObject(parent)
 {
@@ -24,6 +16,33 @@ LMSConnector::LMSConnector(QObject* parent):   QObject(parent)
     QObject::connect(this->socket, &QTcpSocket::readyRead, this, &LMSConnector::dataReceived);
     QObject::connect(this->socket, SIGNAL(error(QAbstractSocket::SocketError)),
                      this, SLOT(socketError(QAbstractSocket::SocketError)));
+
+    trackKeys.append("id");
+    trackKeys.append("title");
+    trackKeys.append("genre");
+    trackKeys.append("artist");
+    trackKeys.append("album");
+    trackKeys.append("duration");
+    trackKeys.append("tracknum");
+    trackKeys.append("year");
+    trackKeys.append("coverid");
+    trackKeys.append("album_id");
+
+    favoriteKeys.append("id");
+    favoriteKeys.append("name");
+    favoriteKeys.append("type");
+    favoriteKeys.append("url");
+    favoriteKeys.append("isaudio");
+
+    artistKeys.append("id");
+    artistKeys.append("artist");
+
+    albumKeys.append("id");
+    albumKeys.append("album");
+    albumKeys.append("year");
+    albumKeys.append("artwork_track_id");
+    albumKeys.append("artist");
+    albumKeys.append("artist_id");
 }
 
 void LMSConnector::moveToThread(QThread *thread)
@@ -106,7 +125,8 @@ QString LMSConnector::GetStatus()
 /* Returns the version of the LMS server */
 QString LMSConnector::GetVersion()
 {
-    qDebug() << this->request("version ?");
+    /* Request : "version ?"
+     * Answer : "version 7.7.3" */
     return this->request("version ?");
 }
 
@@ -143,23 +163,12 @@ QList<FavoriteItem*> LMSConnector::GetFavoriteCollection()
             answer = answer.mid(firstIdIndex).trimmed();
 
             QString row = answer.section("id:", i,i,QString::SectionIncludeLeadingSep| QString::SectionSkipEmpty).trimmed();
-            int indexId = row.indexOf("id:") + 3;
-            int indexName = row.indexOf(" name:") + 6;
-            int indexType = row.indexOf(" type:") +6;
-            int indexUrl = row.indexOf(" url:") + 5;
-            int indexIsAudio = row.indexOf(" isaudio:") + 9;
+            QMap<QString, QString> results = this->ParseAnswer(row, favoriteKeys);
+            FavoriteItem* favorite = new FavoriteItem(this, results);
 
-            QString idStr = row.mid(indexId, indexName-indexId-6).trimmed();
-            QString nameStr = row.mid(indexName, indexType-indexName-6 ).trimmed();
-            QString url = row.mid(indexUrl, indexIsAudio - indexUrl - 9).trimmed();
-
-            FavoriteItem* favorite = new FavoriteItem(this, nameStr, idStr);
-            favorite->SetUrl(url);
             favoriteCollection.append(favorite);
         }
     }
-
-
 
     return favoriteCollection;
 }
@@ -180,12 +189,8 @@ QList<ArtistItem*> LMSConnector::GetArtistCollection()
         for(int j = 0; j <50; j++)
         {
             QString row = answer.section("id:", j,j,QString::SectionIncludeLeadingSep| QString::SectionSkipEmpty).trimmed();
-            int indexId = row.indexOf("id:") + 3;
-            int indexName = row.indexOf("artist:");
-
-            QString idStr = row.mid(indexId, indexName-indexId).trimmed();
-            QString nameStr = row.mid(indexName + 7).trimmed();
-            ArtistItem* artist = new ArtistItem(this, nameStr, idStr.toInt());
+            QMap<QString, QString> results = this->ParseAnswer(row, artistKeys);
+            ArtistItem* artist = new ArtistItem(this, results);
             artistCollection.append(artist);
         }
     }
@@ -202,7 +207,7 @@ QList<AlbumItem*> LMSConnector::GetAlbumCollection(int artistId)
     {
         int startId = counter*50;
 
-        QString answer = this->request(QString("albums %1 %2 artist_id:%3 tags:lyja").arg(QString::number(startId),QString::number(50), QString::number(artistId)));
+        QString answer = this->request(QString("albums %1 %2 artist_id:%3 tags:lyjaS").arg(QString::number(startId),QString::number(50), QString::number(artistId)));
         int firstIdIndex = answer.indexOf(" id:");
         answer = answer.mid(firstIdIndex).trimmed();
         if(answer.contains("count:"))
@@ -210,23 +215,8 @@ QList<AlbumItem*> LMSConnector::GetAlbumCollection(int artistId)
         for(int j = 0; j <50; j++)
         {
             QString row = answer.section(" id:", j,j,QString::SectionIncludeLeadingSep| QString::SectionSkipEmpty).trimmed();
-            int indexId = row.indexOf(" id:") + 4;
-            int indexName = row.indexOf(" album:") + 7;
-            int indexYear = row.indexOf(" year:") + 6;
-            int indexCoverId = row.indexOf(" artwork_track_id:") + 18;
-            int indexArtist = row.indexOf(" artist:") + 8;
-
-            QString idStr = row.mid(indexId, indexName-indexId - 7).trimmed();
-            QString nameStr = row.mid(indexName, indexYear - indexName - 6).trimmed();
-            QString yearStr = row.mid(indexYear, indexCoverId-indexYear-18).trimmed();
-            int year = yearStr.toInt();
-            QString coverId = row.mid(indexCoverId, indexArtist - indexCoverId - 8).trimmed();
-            QString artist = row.mid(indexArtist, row.count() - indexArtist).trimmed();
-
-            AlbumItem* album = new AlbumItem(this, artistId, nameStr, idStr.toInt());
-            album->SetYear(year);
-            album->SetCoverId(coverId);
-            album->SetArtistName(artist);
+            QMap<QString, QString> results = this->ParseAnswer(row, albumKeys);
+            AlbumItem* album = new AlbumItem(this, results);
             albumCollection.append(album);
         }
         counter++;
@@ -244,7 +234,7 @@ QList<TrackItem*> LMSConnector::GetTrackCollection(int albumId)
     {
         int startId = counter*50;
 
-        QString answer = this->request(QString("titles %1 %2 album_id:%3 tags:galdtlyc sort:albumtrack").arg(QString::number(startId),QString::number(50), QString::number(albumId)));
+        QString answer = this->request(QString("titles %1 %2 album_id:%3 tags:galdtlyce sort:albumtrack").arg(QString::number(startId),QString::number(50), QString::number(albumId)));
         int firstIdIndex = answer.indexOf(" id:");
         answer = answer.mid(firstIdIndex).trimmed();
         if(answer.contains(" count:"))
@@ -252,43 +242,8 @@ QList<TrackItem*> LMSConnector::GetTrackCollection(int albumId)
         for(int j = 0; j <50; j++)
         {
             QString row = answer.section(" id:", j,j,QString::SectionIncludeLeadingSep| QString::SectionSkipEmpty).trimmed();
-            int indexId = row.indexOf("id:") + 3;
-            int indexName = row.indexOf(" title:") + 7;
-            int indexGenre = row.indexOf(" genre:") +7;
-            int indexArtist = row.indexOf(" artist:") + 8;
-            int indexAlbum = row.indexOf(" album:") + 7;
-            int indexDuration = row.indexOf(" duration:") +10;
-            int indexTrackNum = row.indexOf(" tracknum:") + 10;
-            int indexYear = row.indexOf(" year:") + 6;
-            int indexCoverid = row.indexOf(" coverid:") + 9;
-
-            QString idStr = row.mid(indexId, indexName-indexId-7).trimmed();
-            QString nameStr = row.mid(indexName, indexGenre-indexName-7 ).trimmed();
-            QString genreStr = row.mid(indexGenre, indexArtist-indexGenre-8).trimmed();
-            QString artistStr = row.mid(indexArtist, indexAlbum-indexArtist-7).trimmed();
-            QString albumStr = row.mid(indexAlbum, indexDuration-indexAlbum-10).trimmed();
-            QString durationStr = row.mid(indexDuration, indexTrackNum-indexDuration-10).trimmed();
-            QString trackNumStr = row.mid(indexTrackNum, indexYear - indexTrackNum-6).trimmed();
-
-            QString coverId;
-            int year;
-            if(indexCoverid != -1)
-            {
-                year = row.mid(indexYear, indexCoverid-indexYear-9).trimmed().toInt();
-                coverId = row.mid(indexCoverid, row.count()-indexCoverid).trimmed();
-            }
-            else
-            {
-                year = row.mid(indexYear, row.count()-indexYear).trimmed().toInt();
-                coverId = QString::null;
-            }
-
-            TrackItem* track = new TrackItem(this, albumId, trackNumStr.toInt(), nameStr, idStr.toInt());
-            track->SetArtistName(artistStr);
-            track->SetCoverId(coverId);
-            track->SetDuration(durationStr.toDouble());
-            track->SetAlbumName(albumStr);
-            track->SetYear(year);
+            QMap<QString, QString> results = this->ParseAnswer(row, trackKeys);
+            TrackItem* track = new TrackItem(this, results);
             trackCollection.append(track);
         }
         counter++;
@@ -296,117 +251,78 @@ QList<TrackItem*> LMSConnector::GetTrackCollection(int albumId)
     return trackCollection;
 }
 
-void LMSConnector::FillTrackInfo(TrackItem* track)
+QMap<QString, QString> LMSConnector::ParseAnswer(QString response, QList<QString> knownKeys)
 {
-    QString answer = this->request(QString("songinfo 0 100 track_id:%1 tags:adlyc").arg(QString::number(track->GetTrackId())));
-
-    int indexArtist = answer.indexOf(" artist:") + 8;
-    int indexDuration = answer.indexOf(" duration:") +10;
-    int indexAlbum = answer.indexOf(" album:") + 7;
-    int indexYear = answer.indexOf(" year:") + 6;
-    int indexCoverid = answer.indexOf(" coverid:") + 9;
-
-    QString artist = answer.mid(indexArtist, indexDuration-indexArtist-10).trimmed();
-    double duration = answer.mid(indexDuration, indexAlbum-indexDuration-7).trimmed().toDouble();
-    QString album = answer.mid(indexAlbum, indexYear-indexAlbum-6).trimmed();
-
-    QString coverId;
-    int year;
-    if(indexCoverid != -1)
+    QString currentKey;
+    QMap<QString, QString> values;
+    if(!response.startsWith(" "))
+        response.insert(0," ");
+    foreach(currentKey, knownKeys)
     {
-        year = answer.mid(indexYear, indexCoverid-indexYear-6).trimmed().toInt();
-        coverId = answer.mid(indexCoverid, indexDuration-indexCoverid-9).trimmed();
-    }
-    else
-    {
-        year = answer.mid(indexYear, answer.count()-indexYear).trimmed().toInt();
-        coverId = QString::null;
-    }
+        int keyIndex = response.indexOf(" " + currentKey + ":", 0, Qt::CaseSensitive);
+        if(keyIndex == -1)
+            continue;
 
-    track->SetArtistName(artist);
-    track->SetCoverId(coverId);
-    track->SetDuration(duration);
-    track->SetAlbumName(album);
-    track->SetYear(year);
-
+        keyIndex+=currentKey.count()+2;
+        int nextIndex = response.indexOf(QRegExp("(\\s[^\\s]+[:]){1}", Qt::CaseSensitive, QRegExp::RegExp2), keyIndex);
+        QString token = response.mid(keyIndex, nextIndex- keyIndex);
+        values[currentKey] = token;
+    }
+    return values;
 }
 
 
 void LMSConnector::Play(int id, int albumId, int tracknum)
 {
-    QString pid = this->playerId;
-
-    QString answer = this->request(QString("%1 playlist clear").arg(pid));
-
-    QString request = QString("%1 playlistcontrol cmd:load album_id:%2 play_index:%3").arg(pid, QString::number(albumId), QString::number(tracknum-1));
+    QString answer = this->request(QString("%1 playlist clear").arg(this->playerId));
+    QString request = QString("%1 playlistcontrol cmd:load album_id:%2 play_index:%3").arg(this->playerId, QString::number(albumId), QString::number(tracknum-1));
     answer = this->request(request);
-
-    answer = this->request(QString("%1 play").arg(pid));
+    answer = this->request(QString("%1 play").arg(this->playerId));
 }
 
 void LMSConnector::PlayAlbum(int albumId)
 {
-    QString pid = this->playerId;
-
-    QString answer = this->request(QString("%1 playlist clear").arg(pid));
-
-    QString request = QString("%1 playlistcontrol cmd:load album_id:%2").arg(pid, QString::number(albumId));
+    QString answer = this->request(QString("%1 playlist clear").arg(this->playerId));
+    QString request = QString("%1 playlistcontrol cmd:load album_id:%2").arg(this->playerId, QString::number(albumId));
     answer = this->request(request);
-
-    answer = this->request(QString("%1 play").arg(pid));
+    answer = this->request(QString("%1 play").arg(this->playerId));
 }
 
 void LMSConnector::PlayFavorite(const QString& id)
 {
-    QString pid = this->playerId;
-
-    QString answer = this->request(QString("%1 playlist clear").arg(pid));
-
-    QString request = QString("%1 favorites playlist play item_id:%2").arg(pid, id);
+    QString answer = this->request(QString("%1 playlist clear").arg(this->playerId));
+    QString request = QString("%1 favorites playlist play item_id:%2").arg(this->playerId, id);
     answer = this->request(request);
 }
 
 void LMSConnector::Play()
 {
-    QString pid = this->playerId;
-
-    QString answer = this->request(QString("%1 play").arg(pid));
+    QString answer = this->request(QString("%1 play").arg(this->playerId));
 }
 
 void LMSConnector::TogglePause()
 {
-
-    QString pid = this->playerId;
-
-    QString answer = this->request(QString("%1 pause").arg(pid));
+    QString answer = this->request(QString("%1 pause").arg(this->playerId));
 }
 
 void LMSConnector::Stop()
 {
-    QString pid = this->playerId;
-
-    QString answer = this->request(QString("%1 stop").arg(pid));
+    QString answer = this->request(QString("%1 stop").arg(this->playerId));
 }
 
 void LMSConnector::Next()
 {
-    QString pid = this->playerId;
-
-    QString answer = this->request(QString("%1 playlist index +1").arg(pid));
+    QString answer = this->request(QString("%1 playlist index +1").arg(this->playerId));
 }
 
 void LMSConnector::Previous()
 {
-    QString pid = this->playerId;
-
-    QString answer = this->request(QString("%1 playlist index -1").arg(pid));
+    QString answer = this->request(QString("%1 playlist index -1").arg(this->playerId));
 }
 
 void LMSConnector::SetVolume(int volume)
 {
-    QString pid = this->playerId;
-
-    QString answer = this->request(QString("%1 mixer volume %2").arg(pid, QString::number(volume)));
+    QString answer = this->request(QString("%1 mixer volume %2").arg(this->playerId, QString::number(volume)));
 }
 
 QString LMSConnector::GetUnknownCoverUrl()
