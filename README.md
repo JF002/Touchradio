@@ -20,17 +20,17 @@ Architecture
 ------------
 Touchradio is only one component of a set composed of:
 
-* An audio streaming server : `Logitech Media Server (LMS) <http://en.wikipedia.org/wiki/Logitech_Media_Server>`__
-* A player for LMS : `Squeezelite <https://code.google.com/p/squeezelite/>`__. 
-* A graphical user interface allowing to control both of them : `Touchradio <./touchradio.html>`__.
+* An audio streaming server : [Logitech Media Server (LMS)](http://en.wikipedia.org/wiki/Logitech_Media_Server)
+* A player for LMS : [Squeezelite] (https://code.google.com/p/squeezelite/).
+* A graphical user interface allowing to control both of them : Touchradio/
 
 Touchradio is a graphical frontend that allows to connect to LMS and to a player in order to control the playback of the tracks and web streams.
-`LMS <http://en.wikipedia.org/wiki/Logitech_Media_Server>`__ is developped by Logitech to support the product range named Squeezebox. This product line is composend of several Squeezebox models that can connect to a LMS server. This allows the users to have multiple players connected to a personnal server. And this server stores the whole music library which will be shared among all connected players.
+[LMS] (http://en.wikipedia.org/wiki/Logitech_Media_Server) is developped by Logitech to support the product range named Squeezebox. This product line is composend of several Squeezebox models that can connect to a LMS server. This allows the users to have multiple players connected to a personnal server. And this server stores the whole music library which will be shared among all connected players.
 
-These are commercial products, but Logitech decided to distribute the source code of LMS under the terms of the `GNU General Public License <http://en.wikipedia.org/wiki/GNU_General_Public_License>`__. Therefore, the open-source world has access to the source code and the documentation of the server. LMS is available on multiple platforms like Windows, Mac OS, Linux, and, of cours, Linux ARM and on the RapsberryPi!
+These are commercial products, but Logitech decided to distribute the source code of LMS under the terms of the [GNU General Public License] (http://en.wikipedia.org/wiki/GNU_General_Public_License). Therefore, the open-source world has access to the source code and the documentation of the server. LMS is available on multiple platforms like Windows, Mac OS, Linux, and, of cours, Linux ARM and on the RapsberryPi!
 LMS offers a very complete web interface which allows to control the playback on each Squeezebox, browse the lirbary, ...
 
-`Squeezelite <https://code.google.com/p/squeezelite/>`__, is a headless Squeezebox emulator. It is a software that acts like a Squeezebox to the Logitech Media Server. Squeezelite handles the playback of the audio streams coming from the LMS on the audio interface of the running system. Squeezelite runs headless, but it is possible to control it via LMS and a CLI API.
+[Squeezelite] (https://code.google.com/p/squeezelite/), is a headless Squeezebox emulator. It is a software that acts like a Squeezebox to the Logitech Media Server. Squeezelite handles the playback of the audio streams coming from the LMS on the audio interface of the running system. Squeezelite runs headless, but it is possible to control it via LMS and a CLI API.
 
 Touchradio uses the functionalities of both of these open-source software to allow the users to control a Squeezebox-like player.
 
@@ -42,14 +42,14 @@ Then, I tried to use my smartphone and ipod but it was not very handful: I spent
 
 At that time, I received my first RaspberryPi. Id did not take long for me until I found it a usefule and practical use! I'm going to build my kitchen radio based on a RasberrpyPi, which will allow me to play my whole music library and web streams!
 
-I did a lot of research and analysis: I had to find a suitable `touchscreen </posts/un-ecran-tactile-hdmi-pour-le-raspberrypi.html>`__, a `suitable graphical framework </posts/touchradio-passage-a-qt5.html>`__, the underlying audio system (I finally choose LMS and Squeezelite, but I also tried OMXPlayer and MPD, for example).
+I did a lot of research and analysis: I had to find a suitable [touchscreen] (http://blog.slashome.fr.cr/posts/un-ecran-tactile-hdmi-pour-le-raspberrypi.html), a [suitable graphical framework] (http://blog.slashome.fr.cr/posts/touchradio-passage-a-qt5.html), the underlying audio system (I finally choose LMS and Squeezelite, but I also tried OMXPlayer and MPD, for example).
 
 Finally, once I did all these choices and tested them, I switched to the development phase of this first prototype. Of course, this is not a very big and complicated project, but it is not easy to find free time and motivation after a 8 hours coding day at work, and without neglecting my private life, my hobbys and my other projects.
 
 -----------
 Development
 -----------
-Touchradio is based on `Qt5 <http://qt-project.org/qt5>`__ and `QtQuick2 <http://qt-project.org/doc/qt-5.0/qtquick/qtquick-index.html>`__. Because Qt5 is a multi platform library, Touchradio should work on any system compatible with Qt5/QtQuick. I choose Qt5 because of its graphical functionalities oriented to mobile and touch applications, and its support for the RaspberryPi.
+Touchradio is based on [Qt5] (http://qt-project.org/qt5) and [QtQuick2] (http://qt-project.org/doc/qt-5.0/qtquick/qtquick-index.html). Because Qt5 is a multi platform library, Touchradio should work on any system compatible with Qt5/QtQuick. I choose Qt5 because of its graphical functionalities oriented to mobile and touch applications, and its support for the RaspberryPi.
 The whole source code is written in C++, without any other dependance.
 
 --------------------
