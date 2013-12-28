@@ -67,7 +67,7 @@ Rectangle {
     Image {
         id: backgroundImage
         anchors.fill: parent
-        source: "../../Ressources/background1.jpg"
+        source: "../Ressources/background1.jpg"
         fillMode: Image.PreserveAspectCrop
     }
 
@@ -76,7 +76,7 @@ Rectangle {
         anchors.bottom: rootRectangle.bottom
         anchors.right: rootRectangle.right
 
-        source: "../../Ressources/volume3.png"
+        source: "../Ressources/volume3.png"
         height: 128
         width: 128
         anchors.margins: 0
@@ -102,7 +102,7 @@ Rectangle {
         anchors.bottom: rootRectangle.bottom
         anchors.left: rootRectangle.left
 
-        source: "../../Ressources/menu3.png"
+        source: "../Ressources/menu3.png"
         height: 128
         width: 128
         anchors.margins: 0
@@ -165,7 +165,7 @@ Rectangle {
             anchors.verticalCenter: parent.verticalCenter
             anchors.right: parent.right
 
-            source: "../../Ressources/on_off.png"
+            source: "../Ressources/on_off.png"
             height: parent.height
             width: height
             onClicked: {
@@ -267,7 +267,7 @@ Rectangle {
             ImageButton {
                 Layout.fillHeight: true
                 Layout.fillWidth: true
-                source: "../../Ressources/video_previous_64.png"
+                source: "../Ressources/video_previous_64.png"
                 height: 64
                 onClicked: {
                     console.log("previous")
@@ -279,9 +279,9 @@ Rectangle {
                 Layout.fillWidth: true
                 source: {
                     if(statusManager.mode == "pause")
-                        return "../../Ressources/video_pause_64.png"
+                        return "../Ressources/video_pause_64.png"
                     else
-                        return "../../Ressources/video_play_64.png"
+                        return "../Ressources/video_play_64.png"
                 }
 
                 height: 64
@@ -293,7 +293,7 @@ Rectangle {
             ImageButton {
                 Layout.fillHeight: true
                 Layout.fillWidth: true
-                source: "../../Ressources/video_next_64.png"
+                source: "../Ressources/video_next_64.png"
                 height: 64
                 onClicked: {
                     console.log("next")

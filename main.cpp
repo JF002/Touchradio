@@ -11,6 +11,7 @@
 #include "favoriteitem.h"
 #include <QHostAddress>
 #include <QDebug>
+#include <QDir>
 #include "monitor.h"
 #include "applicationsettings.h"
 
@@ -118,7 +119,10 @@ int main(int argc, char *argv[])
     viewer.engine()->rootContext()->setContextProperty("statusManager", &status);
     viewer.engine()->rootContext()->setContextProperty("playerController", &playerController);
 
-    viewer.setSource(QUrl("qml/qml/main.qml"));
+    QDir directory(QCoreApplication::applicationDirPath());
+    QString path = directory.absoluteFilePath("qml/main.qml");
+
+    viewer.setSource(QUrl::fromLocalFile(path));
     QObject::connect((QObject*)viewer.engine(), SIGNAL(quit()), &app, SLOT(quit()));
 
     QObject *item = (QObject*)viewer.rootObject();

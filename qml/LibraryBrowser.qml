@@ -94,7 +94,7 @@ Item {
                     id: backImage
 
                     fillMode: Image.PreserveAspectFit
-                    source: "../../Ressources/arrow_left_64.png"
+                    source: "../Ressources/arrow_left_64.png"
                     anchors.fill: parent
                 }
                 MouseArea {
@@ -117,7 +117,7 @@ Item {
             }
 
             ImageButton {
-                source: "../../Ressources/close.png"
+                source: "../Ressources/close.png"
                 anchors.top: parent.top
                 anchors.right: parent.right
                 anchors.bottom: parent.bottom
@@ -137,7 +137,7 @@ Item {
             clip: true
             delegate: LibraryItemDelegate {
                 text: object.title
-                cover: (object.coverUrl)?object.coverUrl:"../../Ressources/disk_48.png"
+                cover: (object.coverUrl)?object.coverUrl:"../Ressources/disk_48.png"
                 onClicked:
                 {
                     if(object.type == 3)

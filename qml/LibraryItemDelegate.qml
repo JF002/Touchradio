@@ -31,7 +31,7 @@ Item {
         anchors.verticalCenter: parent.verticalCenter
         anchors.leftMargin: 30
 
-        source: "../../Ressources/disk_48.png"
+        source: "../Ressources/disk_48.png"
         fillMode: Image.PreserveAspectFit
         width: 30
         height: parent.height - 15

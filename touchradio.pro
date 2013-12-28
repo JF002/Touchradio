@@ -1,7 +1,23 @@
 # Add more folders to ship with the application, here
 folder_01.source = qml
-folder_01.target = qml
+folder_02.source = Ressources
+folder_03.source = conf
+
+
+CONFIG(debug, debug|release) {
+    folder_01.target = $$DESTDIR/debug
+    folder_02.target = $$DESTDIR/debug
+    folder_03.target = $$DESTDIR/debug
+} else {
+    folder_01.target = $$DESTDIR/release
+    folder_02.target = $$DESTDIR/release
+    folder_03.target = $$DESTDIR/release
+}
+
+
 DEPLOYMENTFOLDERS = folder_01
+DEPLOYMENTFOLDERS += folder_02
+DEPLOYMENTFOLDERS += folder_03
 
 # Additional import path used to resolve QML modules in Creator's code model
 QML_IMPORT_PATH =

@@ -5,7 +5,7 @@
 ApplicationSettings::ApplicationSettings()
 {
     QDir directory(QCoreApplication::applicationDirPath());
-    QString path = directory.absoluteFilePath("touchradio.conf");
+    QString path = directory.absoluteFilePath("conf/touchradio.conf");
     settings = new QSettings(path, QSettings::IniFormat);
 }
 
