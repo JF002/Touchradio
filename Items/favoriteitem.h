@@ -10,18 +10,19 @@ class FavoriteItem : public RessourceItem
     Q_PROPERTY(QString coverUrl READ GetCoverUrl NOTIFY CoverUrlChanged)
 public:
     FavoriteItem();
-    FavoriteItem(LMSConnector* connector, const QString& favoriteName, const QString& favoriteId);
-    FavoriteItem(LMSConnector* connector, QMap<QString, QString> tokens);
+    FavoriteItem(LmsConnector* connector, const QString& favoriteName, const QString& favoriteId);
+    FavoriteItem(LmsConnector* connector, QMap<QString, QString> tokens);
 
     RessourceItem::ItemTypes GetItemType();
-    void Play();
+
 
     QString GetUrl();
     void SetUrl(QString url);
 
     QString GetCoverUrl();
-    void SetCoverUrl(QString coverUrl);
 
+public slots:
+    void Play();
 
 Q_SIGNALS:
     void UrlChanged();
@@ -29,7 +30,7 @@ Q_SIGNALS:
 
 private:
     QString m_favoriteId;
-    LMSConnector* m_connector;
+    LmsConnector* m_connector;
     QString m_url;
 };
 

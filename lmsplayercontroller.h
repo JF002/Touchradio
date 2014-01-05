@@ -8,7 +8,7 @@ class LmsPlayerController : public QObject
 {
     Q_OBJECT
 public:
-    explicit LmsPlayerController(LMSConnector* connector, QObject *parent = 0);
+    explicit LmsPlayerController(LmsConnector* connector, QObject *parent = 0);
 
 signals:
 
@@ -22,7 +22,7 @@ public slots:
     void setVolume(int volume);
 
 private:
-    LMSConnector* connector;
+    LmsConnector* connector;
 };
 
 #endif // LMSPLAYERCONTROLLER_H

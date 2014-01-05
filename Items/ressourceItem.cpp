@@ -1,6 +1,6 @@
 #include <QHash>
 
-#include "RessourceItem.h"
+#include "ressourceItem.h"
 
 RessourceItem::RessourceItem(QObject* parent)
 {

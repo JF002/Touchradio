@@ -7,12 +7,12 @@
 #include "lmsconnector.h"
 #include "lmsstatus.h"
 
-class LMSConnector;
-class LMSStatusThread : public QObject
+class LmsConnector;
+class LmsStatusThread : public QObject
 {
     Q_OBJECT
 public:
-    LMSStatusThread(LMSConnector* connector, LmsStatus* status);
+    LmsStatusThread(LmsConnector* connector, LmsStatus* status);
     void Start();
 
 private slots:
@@ -20,7 +20,7 @@ private slots:
 
 private:
     bool isRunning;
-    LMSConnector* connector;
+    LmsConnector* connector;
     LmsStatus* status;
     QThread thread;
 };

@@ -7,7 +7,7 @@ FavoriteItem::FavoriteItem() : RessourceItem("")
 }
 
 
-FavoriteItem::FavoriteItem(LMSConnector* connector, const QString& favoriteName, const QString& favoriteId) : RessourceItem(favoriteName)
+FavoriteItem::FavoriteItem(LmsConnector* connector, const QString& favoriteName, const QString& favoriteId) : RessourceItem(favoriteName)
 {
     m_favoriteId = favoriteId;
     m_connector = connector;
@@ -15,7 +15,7 @@ FavoriteItem::FavoriteItem(LMSConnector* connector, const QString& favoriteName,
 }
 
 
-FavoriteItem::FavoriteItem(LMSConnector* connector, QMap<QString, QString> tokens) : RessourceItem("")
+FavoriteItem::FavoriteItem(LmsConnector* connector, QMap<QString, QString> tokens) : RessourceItem("")
 {
     m_connector = connector;
     m_type = RessourceItem::Favorite;
@@ -54,7 +54,3 @@ QString FavoriteItem::GetCoverUrl()
     return m_connector->GetRadioCoverUrl();
 }
 
-void FavoriteItem::SetCoverUrl(QString coverUrl)
-{
-
-}

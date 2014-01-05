@@ -2,16 +2,16 @@
 #define ARTISTITEM_H
 
 #include "lmsconnector.h"
-#include "RessourceItem.h"
+#include "ressourceItem.h"
 
-class LMSConnector;
+class LmsConnector;
 
 class ArtistItem : public RessourceItem
 {
 public:
     ArtistItem();
-    ArtistItem(LMSConnector* connector, const QString artistName, int artistId);
-    ArtistItem(LMSConnector* connector, QMap<QString, QString> tokens);
+    ArtistItem(LmsConnector* connector, const QString artistName, int artistId);
+    ArtistItem(LmsConnector* connector, QMap<QString, QString> tokens);
 
     int GetArtistId();
 
@@ -19,7 +19,7 @@ public slots:
     QString toString() const;
 
 protected:
-    LMSConnector* connector;
+    LmsConnector* connector;
     virtual void FillSubItems();
 
 private:

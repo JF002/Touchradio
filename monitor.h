@@ -7,9 +7,9 @@ class Monitor: public QObject
 {
     Q_OBJECT
 public:
-    Monitor(QGuiApplication* app) : QObject(0)
+    Monitor(const QGuiApplication* app_) : QObject(0)
     {
-        this->app = app;
+        this->app = app_;
     }
 public slots:
     void exit() {
@@ -20,7 +20,7 @@ public slots:
         app->exit(1);
     }
 private:
-    QGuiApplication *app;
+    const QGuiApplication* app;
 };
 
 #endif // MONITOR_H

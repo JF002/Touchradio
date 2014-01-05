@@ -1,21 +1,22 @@
 #include "lmsstatusthread.h"
 
-LMSStatusThread::LMSStatusThread(LMSConnector* connector, LmsStatus* status) : QObject()
+LmsStatusThread::LmsStatusThread(LmsConnector* connector, LmsStatus* status) : QObject()
 {
     this->connector = connector;
     this->status = status;
+    this->status->SetLmsAddress(connector->GetLmsAddress());
     this->moveToThread(&thread);
     connector->moveToThread(&thread);
     this->connect(&thread, SIGNAL(started()), SLOT(run()));
 }
 
-void LMSStatusThread::Start()
+void LmsStatusThread::Start()
 {
      isRunning = true;
      thread.start();
 }
 
-void LMSStatusThread::run()
+void LmsStatusThread::run()
 {
     while(isRunning)
     {

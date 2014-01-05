@@ -12,7 +12,7 @@ TrackItem::TrackItem()
     m_coverId = QString::null;
 }
 
-TrackItem::TrackItem(LMSConnector* connector, int albumId, int trackNum, const QString trackName, int trackId): RessourceItem(trackName)
+TrackItem::TrackItem(LmsConnector* connector, int albumId, int trackNum, const QString trackName, int trackId): RessourceItem(trackName)
 {
     m_albumId = albumId;
     m_trackId = trackId;
@@ -24,7 +24,7 @@ TrackItem::TrackItem(LMSConnector* connector, int albumId, int trackNum, const Q
     m_coverId = QString::null;
 }
 
-TrackItem::TrackItem(LMSConnector* connector, QMap<QString, QString> tokens) : RessourceItem("")
+TrackItem::TrackItem(LmsConnector* connector, QMap<QString, QString> tokens) : RessourceItem("")
 {
     this->connector = connector;
     this->m_type = Track;

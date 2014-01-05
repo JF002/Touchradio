@@ -19,6 +19,7 @@ class LmsStatus: public QObject
     Q_PROPERTY(double currentTrackDuration READ GetCurrentTrackDuration NOTIFY CurrentTrackDurationChanged)
     Q_PROPERTY(double currentTrackTime READ GetCurrentTrackTime NOTIFY CurrentTrackTimeChanged)
     Q_PROPERTY(QString mode READ GetCurrentMode NOTIFY ModeChanged)
+    Q_PROPERTY(QString lmsAddress READ GetLmsAddress NOTIFY LmsAddressChanged)
 public:
     LmsStatus();
 
@@ -34,7 +35,9 @@ public:
     double GetCurrentTrackDuration();
     QString GetCurrentTrackCoverUrl();
     QString GetCurrentMode();
+    QString GetLmsAddress();
 
+    void SetLmsAddress(QString address);
 Q_SIGNALS:
     void PlayerNameChanged();
     void MixerVolumeChanged();
@@ -45,6 +48,7 @@ Q_SIGNALS:
     void CurrentTrackDurationChanged();
     void CurrentTrackTimeChanged();
     void CurrentTrackCoverUrlChanged();
+    void LmsAddressChanged();
     void ModeChanged();
 
 protected:
@@ -75,6 +79,8 @@ protected:
     QString currentTrackArtist;
     QString currentTrackTitle;
     QString currentTrackCoverId;
+
+    QString lmsAddress;
 
     void SetPlayerName(const QString& playerName);
     void SetMixerVolume(double volume);

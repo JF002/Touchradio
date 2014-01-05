@@ -14,11 +14,20 @@ Rectangle {
 
     states: [
         State {
+            name: "CONNECTING"
+            PropertyChanges { target: browserRectangle; state: "DISABLED" }
+            PropertyChanges { target: powerOffDialog; state: "DISABLED"}
+            PropertyChanges { target: opacifierRectangle; opacity: 0.8}
+            PropertyChanges { target: opacifierRectangle; enabled: true }
+            //PropertyChanges { target: connectingDialog; state: "ENABLED" }
+        },
+        State {
             name: "PLAYBACK"
             PropertyChanges { target: browserRectangle; state: "DISABLED" }
             PropertyChanges { target: powerOffDialog; state: "DISABLED"}
             PropertyChanges { target: opacifierRectangle; opacity: 0}
             PropertyChanges { target: opacifierRectangle; enabled: false }
+            //PropertyChanges { target: connectingDialog; state: "DISABLED" }
 
         },
         State {
@@ -28,6 +37,7 @@ Rectangle {
             PropertyChanges { target: powerOffDialog; state: "DISABLED"}
             PropertyChanges { target: opacifierRectangle; opacity: 0.8 }
             PropertyChanges { target: opacifierRectangle; enabled: true }
+            //PropertyChanges { target: connectingDialog; state: "DISABLED" }
         },
         State {
             name: "POWEROFFDIALOG"
@@ -35,11 +45,21 @@ Rectangle {
             PropertyChanges { target: browserRectangle; state: "DISABLED" }
             PropertyChanges { target: opacifierRectangle; opacity: 0.8 }
             PropertyChanges { target: opacifierRectangle; enabled: true }
+            //PropertyChanges { target: connectingDialog; state: "DISABLED" }
         }
-
     ]
 
     transitions: [
+        Transition {
+            from: "*"
+            to: "CONNECTING"
+            NumberAnimation { target: opacifierRectangle; property: "opacity"; duration: 500; easing.type: Easing.InOutQuad }
+        },
+        Transition {
+            from: "CONNECTING"
+            to: "*"
+            NumberAnimation { target: opacifierRectangle; property: "opacity"; duration: 500; easing.type: Easing.InOutQuad }
+        },
         Transition {
             from: "PLAYBACK"
             to: "BROWSER"
@@ -62,7 +82,6 @@ Rectangle {
         }
 
     ]
-
 
     Image {
         id: backgroundImage
@@ -113,9 +132,6 @@ Rectangle {
                 rootRectangle.state = "PLAYBACK"
         }
     }
-
-
-
 
     Item
     {
@@ -320,6 +336,15 @@ Rectangle {
         onCloseRequest: rootRectangle.state = "PLAYBACK"
     }
 
+    /*
+    ConnectingDialog {
+        id: connectingDialog
+        height: rootRectangle.height / 4
+        width: rootRectangle.width / 4
+        anchors.centerIn: rootRectangle
+        state: "DISABLED"
+    }
+*/
 
     PowerOffDialog {
         id: powerOffDialog

@@ -30,6 +30,20 @@ LmsStatus::LmsStatus()
     this->knowTrackTokens.append("album");
     this->knowTrackTokens.append("coverid");
     this->knowTrackTokens.append("coverart");
+    this->lmsAddress = "0.0.0.0";
+}
+
+void LmsStatus::SetLmsAddress(QString address)
+{
+    if(this->lmsAddress != address)
+    {
+        this->lmsAddress = address;
+        emit LmsAddressChanged();
+    }
+}
+
+QString LmsStatus::GetLmsAddress(){
+    return this->lmsAddress;
 }
 
 void LmsStatus::Update(const QString& strStatus)

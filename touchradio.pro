@@ -19,6 +19,9 @@ DEPLOYMENTFOLDERS = folder_01
 DEPLOYMENTFOLDERS += folder_02
 DEPLOYMENTFOLDERS += folder_03
 
+INCLUDEPATH += ./Items/
+INCLUDEPATH += ./Exceptions/
+
 # Additional import path used to resolve QML modules in Creator's code model
 QML_IMPORT_PATH =
 
@@ -29,20 +32,22 @@ QML_IMPORT_PATH =
 
 # The .cpp file which was generated for your project. Feel free to hack it.
 SOURCES += main.cpp \
-    RessourceItem.cpp \
+    Items/albumitem.cpp \
+    Items/artistitem.cpp \
+    Items/favoriteitem.cpp \
+    Items/trackitem.cpp \
+    Items/ressourceItem.cpp \
     RessourceCenterModel.cpp \
     lmsconnector.cpp \
-    artistitem.cpp \
-    albumitem.cpp \
-    trackitem.cpp \
     lmsstatus.cpp \
     lmsstatusthread.cpp \
-    favoriteitem.cpp \
     lmsplayercontroller.cpp \
     monitor.cpp \
     applicationsettings.cpp \
     Exceptions/exception.cpp \
-    Exceptions/timeoutexception.cpp
+    Exceptions/timeoutexception.cpp \
+    touchradio.cpp
+
 
 # Installation path
 # target.path =
@@ -52,20 +57,21 @@ include(qtquick2applicationviewer/qtquick2applicationviewer.pri)
 qtcAddDeployment()
 
 HEADERS += \
-    RessourceItem.h \
     RessourceCenterModel.h \
     lmsconnector.h \
-    artistitem.h \
-    albumitem.h \
-    trackitem.h \
-    lmsstatus.h \
     lmsstatusthread.h \
-    favoriteitem.h \
     lmsplayercontroller.h \
     monitor.h \
     applicationsettings.h \
+    lmsstatus.h \
     Exceptions/exception.h \
-    Exceptions/timeoutexception.h
+    Exceptions/timeoutexception.h \
+    Items/albumitem.h \
+    Items/artistitem.h \
+    Items/favoriteitem.h \
+    Items/trackitem.h \
+    Items/ressourceItem.h \
+    touchradio.h
 
 RESOURCES += \
     ressources.qrc
@@ -79,4 +85,5 @@ OTHER_FILES += \
     qml/LibraryItemDelegate.qml \
     qml/LibraryBrowserInfo.qml \
     qml/LibraryBrowser.qml \
-    qml/ImageButton.qml
+    qml/ImageButton.qml \
+    qml/ConnectingDialog.qml

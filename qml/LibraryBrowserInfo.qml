@@ -79,7 +79,7 @@ Rectangle {
 
         Image {
             id: favoriteCoverImage
-            source: favorite!=null?favorite.coverUrl:""
+            source: favorite != null?favorite.coverUrl:""
             anchors.horizontalCenter: parent.horizontalCenter
             anchors.top: parent.top
             anchors.topMargin: 20

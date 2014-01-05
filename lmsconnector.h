@@ -12,14 +12,14 @@ class ArtistItem;
 class AlbumItem;
 class TrackItem;
 class FavoriteItem;
-class LMSStatusThread;
+class LmsStatusThread;
 
 
-class LMSConnector : public QObject
+class LmsConnector : public QObject
 {
     Q_OBJECT
 public:
-    LMSConnector(QObject* parent = NULL);
+    LmsConnector(QObject* parent = NULL);
 
     bool connect(const QHostAddress & address, quint16 port);
 
@@ -52,6 +52,8 @@ public:
     QString GetCoverUrl(QString& coverId);
     QString GetRadioCoverUrl();
 
+    QString GetLmsAddress();
+
 protected:
     void write(QString message);
     QString read();
@@ -72,6 +74,7 @@ private:
     QTcpSocket* socket;
     QString playerId;
     QHostAddress address;
+    quint16 port;
 
     QList<QString> trackKeys;
     QList<QString> favoriteKeys;

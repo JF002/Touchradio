@@ -1,7 +1,7 @@
 #include "lmsplayercontroller.h"
 #include <QDebug>
 
-LmsPlayerController::LmsPlayerController(LMSConnector* connector, QObject *parent) :
+LmsPlayerController::LmsPlayerController(LmsConnector* connector, QObject *parent) :
     QObject(parent)
 {
     this->connector = connector;

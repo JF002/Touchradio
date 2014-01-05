@@ -9,7 +9,7 @@ AlbumItem::AlbumItem()
     detailsInfoFilled = false;
 }
 
-AlbumItem::AlbumItem(LMSConnector* connector, int artistId, const QString albumName, int albumId) : RessourceItem(albumName)
+AlbumItem::AlbumItem(LmsConnector* connector, int artistId, const QString albumName, int albumId) : RessourceItem(albumName)
 {
     this->m_albumName = m_title = albumName;
     this->m_artistId = artistId;
@@ -19,17 +19,10 @@ AlbumItem::AlbumItem(LMSConnector* connector, int artistId, const QString albumN
     detailsInfoFilled = false;
 }
 
-AlbumItem::AlbumItem(LMSConnector* connector, QMap<QString, QString> tokens) : RessourceItem("")
+AlbumItem::AlbumItem(LmsConnector* connector, QMap<QString, QString> tokens) : RessourceItem("")
 {
     this->connector = connector;
     m_type = RessourceItem::Album;
-
-    /*
-     *    albumKeys.append("id");
-    albumKeys.append("album");
-    albumKeys.append("year");
-    albumKeys.append("artwork_track_id");
-    albumKeys.append("artist");*/
 
     if(tokens.contains("id"))
         this->m_albumId = tokens["id"].toInt();

@@ -2,9 +2,9 @@
 #define ALBUMITEM_H
 
 #include "lmsconnector.h"
-#include "RessourceItem.h"
+#include "ressourceItem.h"
 
-class LMSConnector;
+class LmsConnector;
 
 class AlbumItem : public RessourceItem
 {
@@ -15,8 +15,8 @@ class AlbumItem : public RessourceItem
     Q_PROPERTY(QString artist READ GetArtistName NOTIFY ArtistChanged)
 public:
     AlbumItem();
-    AlbumItem(LMSConnector* connector, int artistId, const QString albumName, int albumId);
-    AlbumItem(LMSConnector* connector, QMap<QString, QString> tokens);
+    AlbumItem(LmsConnector* connector, int artistId, const QString albumName, int albumId);
+    AlbumItem(LmsConnector* connector, QMap<QString, QString> tokens);
 
     int GetAlbumId();
     int GetArtistId();
@@ -51,7 +51,7 @@ private:
     QString m_albumName;
     int m_artistId;
     int m_albumId;
-    LMSConnector* connector;
+    LmsConnector* connector;
     int m_year;
     double m_duration;
     QString m_coverId;

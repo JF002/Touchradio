@@ -1,5 +1,5 @@
 #include "RessourceCenterModel.h"
-#include "RessourceItem.h"
+#include "ressourceItem.h"
 #include "trackitem.h"
 #include "favoriteitem.h"
 #include <QDebug>
@@ -44,7 +44,6 @@ QObjectListModel::QObjectListModel(QObject *parent) :
 {
     QHash<int, QByteArray> roles;
     roles[ObjectRole] = "object";
-    //setRoleNames(roles);
     currentItem = NULL;
 }
 
@@ -57,7 +56,6 @@ QObjectListModel::QObjectListModel(QObjectList objects, QObject *parent) :
 {
     QHash<int, QByteArray> roles;
     roles[ObjectRole] = "object";
-    //setRoleNames(roles);
     currentItem = NULL;
 }
 
@@ -68,32 +66,18 @@ QHash<int, QByteArray> QObjectListModel::roleNames() const {
 }
 
 
-void QObjectListModel::itemClicked(const int itemId) {
+void QObjectListModel::goToSubItems(const int itemId) {
 
     foreach( QObject* item, m_objects )
     {
         RessourceItem* rItem = (RessourceItem*)item;
         if(rItem->GetId() == itemId)
         {
-            if(rItem->GetItemType() == RessourceItem::Track)
+            this->clear();
+            this->currentItem = rItem;
+            foreach( RessourceItem* item2, rItem->GetSubItems())
             {
-                TrackItem* track = ((TrackItem*)rItem);
-                track->Play();
-            }
-            else if(rItem->GetItemType() == RessourceItem::Favorite)
-            {
-                FavoriteItem* favorite = ((FavoriteItem*)rItem);
-                favorite->Play();
-            }
-            else
-            {
-
-                this->clear();
-                this->currentItem = rItem;
-                foreach( RessourceItem* item2, rItem->GetSubItems() )
-                {
-                    this->append(item2);
-                }
+                this->append(item2);
             }
         }
     }
@@ -326,67 +310,3 @@ QObject *QObjectListModel::get(int i) const
 {
     return m_objects.at(i);
 }
-
-/*!
-    \fn int QObjectListModel::size() const
-
-    Returns the number of items in the model.
-
-    \sa isEmpty(), count()
-*/
-
-/*! \fn int QObjectListModel::count() const
-
-    Returns the number of items in the model. This is effectively the
-    same as size().
-*/
-
-/*! \fn bool QObjectListModel::isEmpty() const
-
-    Returns true if the model contains no items; otherwise returns
-    false.
-
-    \sa size()
-*/
-
-/*! \fn QObject *QObjectListModel::at(int i) const
-
-    Returns the object at index position \a i in the list. \a i must be
-    a valid index position in the model (i.e., 0 <= \a i < size()).
-
-    \sa operator[]()
-*/
-
-/*! \fn QObject *QObjectListModel::operator[](int i) const
-
-    \overload
-
-    Same as at().
-*/
-
-/*! \fn int QObjectListModel::indexOf(QObject *object, int from = 0) const
-
-    Returns the index position of the first occurrence of \a object in
-    the model, searching forward from index position \a from. Returns
-    -1 if no item matched.
-
-    \sa lastIndexOf(), contains()
-*/
-
-/*! \fn int QObjectListModel::lastIndexOf(QObject *object, int from = -1) const
-
-    Returns the index position of the last occurrence of \a object in
-    the list, searching backward from index position \a from. If \a
-    from is -1 (the default), the search starts at the last item.
-    Returns -1 if no item matched.
-
-    \sa indexOf()
-*/
-
-/*! \fn bool QObjectListModel::contains(Object *object) const
-
-    Returns true if the list contains an occurrence of \a object;
-    otherwise returns false.
-
-    \sa indexOf(), count()
-*/

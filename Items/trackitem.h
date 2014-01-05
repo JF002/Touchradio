@@ -2,9 +2,9 @@
 #define TRACKITEM_H
 
 #include "lmsconnector.h"
-#include "RessourceItem.h"
+#include "ressourceItem.h"
 
-class LMSConnector;
+class LmsConnector;
 
 
 class TrackItem : public RessourceItem
@@ -18,8 +18,8 @@ class TrackItem : public RessourceItem
     Q_PROPERTY(int year READ GetYear WRITE SetYear NOTIFY YearChanged)
 public:
     TrackItem();
-    TrackItem(LMSConnector* connector, int albumId, int tracknum, const QString trackName, int trackId);
-    TrackItem(LMSConnector* connector, QMap<QString, QString> tokens);
+    TrackItem(LmsConnector* connector, int albumId, int tracknum, const QString trackName, int trackId);
+    TrackItem(LmsConnector* connector, QMap<QString, QString> tokens);
     int GetAlbumId();
     int GetTrackId();
     QString GetTrackTitle();
@@ -36,7 +36,7 @@ public:
     void SetAlbumName(QString album);
     void SetYear(int year);
 
-    void Play();
+
 
 Q_SIGNALS:
     void TrackTitleChanged();
@@ -47,9 +47,10 @@ Q_SIGNALS:
 
 public slots:
     QString toString() const;
+    void Play();
 
 protected:
-    LMSConnector* connector;
+    LmsConnector* connector;
     virtual void FillSubItems();
     void GetDetailedInfo();
 

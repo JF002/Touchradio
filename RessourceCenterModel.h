@@ -3,7 +3,7 @@
 #define QOBJECTLISTMODEL_H
 
 #include <QAbstractListModel>
-#include "RessourceItem.h"
+#include "ressourceItem.h"
 
 /*
     Open issues:
@@ -65,7 +65,7 @@ Q_SIGNALS:
     void currentItemNameChanged();
 
 public slots:
-    void itemClicked(const int itemId);
+    void goToSubItems(const int itemId);
     void back();
 
 protected:

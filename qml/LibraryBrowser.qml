@@ -147,17 +147,16 @@ Item {
                     else if(object.type == 2)
                     {
                         infoRectangle.album = object
-                        listview.model.itemClicked(object.id);
+                        listview.model.goToSubItems(object.id);
                         listview.positionViewAtBeginning();
                     }
                     else if(object.type == 4)
                     {
                         infoRectangle.favorite = object
                     }
-
                     else
                     {
-                        listview.model.itemClicked(object.id);
+                        listview.model.goToSubItems(object.id);
                         listview.positionViewAtBeginning();
                     }
                 }
@@ -172,11 +171,11 @@ Item {
             anchors.right: parent.right
             anchors.bottom: parent.bottom
             onTrackSelected: {
-                listview.model.itemClicked(trackId)
+                infoRectangle.track.Play();
                 root.closeRequest();
             }
             onFavoriteSelected: {
-                listview.model.itemClicked(favoriteId)
+                infoRectangle.favorite.Play();
                 root.closeRequest();
             }
             onAlbumSelected: {

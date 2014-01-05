@@ -10,10 +10,10 @@
 #include "favoriteitem.h"
 #include "Exceptions/timeoutexception.h"
 
-LMSConnector::LMSConnector(QObject* parent):   QObject(parent)
+LmsConnector::LmsConnector(QObject* parent):   QObject(parent)
 {
     socket = new QTcpSocket();
-    QObject::connect(this->socket, &QTcpSocket::readyRead, this, &LMSConnector::dataReceived);
+    QObject::connect(this->socket, &QTcpSocket::readyRead, this, &LmsConnector::dataReceived);
     QObject::connect(this->socket, SIGNAL(error(QAbstractSocket::SocketError)),
                      this, SLOT(socketError(QAbstractSocket::SocketError)));
 
@@ -45,7 +45,7 @@ LMSConnector::LMSConnector(QObject* parent):   QObject(parent)
     albumKeys.append("artist_id");
 }
 
-void LMSConnector::moveToThread(QThread *thread)
+void LmsConnector::moveToThread(QThread *thread)
 {
     ((QObject*)this)->moveToThread(thread);
     socket->moveToThread(thread);
@@ -55,7 +55,7 @@ void LMSConnector::moveToThread(QThread *thread)
 /* Get the ID (MAC address) of the player identified by index
  * @param index Index of the player
  * @return The Identifier of the player */
-QString LMSConnector::ReadPlayerId(int index)
+QString LmsConnector::ReadPlayerId(int index)
 {
     /* Request : "player id 0 ?"
      * Answer : "player id 0 9f:83:74:25:3e:5c"
@@ -77,11 +77,12 @@ QString LMSConnector::ReadPlayerId(int index)
     return id;
 }
 
-bool LMSConnector::connect(const QHostAddress & address, quint16 port)
+bool LmsConnector::connect(const QHostAddress & address, quint16 port)
 {
     bool connected = false;
     int retries = 60;
     this->address = address;
+    this->port = port;
 
 
     while(!connected && retries > 0)
@@ -99,14 +100,19 @@ bool LMSConnector::connect(const QHostAddress & address, quint16 port)
 
 }
 
-void LMSConnector::BindToPlayer(int index)
+QString LmsConnector::GetLmsAddress()
+{
+    return this->address.toString() + ":" + QString::number(this->port);
+}
+
+void LmsConnector::BindToPlayer(int index)
 {
     this->playerId = ReadPlayerId(index);
 }
 
 /* Get a string from the server describing its status.
  * This string is intended to be handled by a LmsStatus object */
-QString LMSConnector::GetStatus()
+QString LmsConnector::GetStatus()
 {
     /* Request : "xx:xx:xx:xx:xx:xx status - 1 tags:alcjK"
      * Response :
@@ -123,14 +129,14 @@ QString LMSConnector::GetStatus()
 }
 
 /* Returns the version of the LMS server */
-QString LMSConnector::GetVersion()
+QString LmsConnector::GetVersion()
 {
     /* Request : "version ?"
      * Answer : "version 7.7.3" */
     return this->request("version ?");
 }
 
-int LMSConnector::GetArtistNumber()
+int LmsConnector::GetArtistNumber()
 {
     QString answer = this->request("info total artists ?");
     answer = answer.section("info total artists ",1,1);
@@ -142,7 +148,7 @@ int LMSConnector::GetArtistNumber()
         return 0;
 }
 
-QList<FavoriteItem*> LMSConnector::GetFavoriteCollection()
+QList<FavoriteItem*> LmsConnector::GetFavoriteCollection()
 {
     bool finished = false;
     QList<FavoriteItem*> favoriteCollection;
@@ -173,7 +179,7 @@ QList<FavoriteItem*> LMSConnector::GetFavoriteCollection()
     return favoriteCollection;
 }
 
-QList<ArtistItem*> LMSConnector::GetArtistCollection()
+QList<ArtistItem*> LmsConnector::GetArtistCollection()
 {
     QList<ArtistItem*> artistCollection;
     int artistCount = GetArtistNumber();
@@ -197,7 +203,7 @@ QList<ArtistItem*> LMSConnector::GetArtistCollection()
     return artistCollection;
 }
 
-QList<AlbumItem*> LMSConnector::GetAlbumCollection(int artistId)
+QList<AlbumItem*> LmsConnector::GetAlbumCollection(int artistId)
 {
     QList<AlbumItem*> albumCollection;
     bool continueLoop = true;
@@ -224,7 +230,7 @@ QList<AlbumItem*> LMSConnector::GetAlbumCollection(int artistId)
     return albumCollection;
 }
 
-QList<TrackItem*> LMSConnector::GetTrackCollection(int albumId)
+QList<TrackItem*> LmsConnector::GetTrackCollection(int albumId)
 {
     QList<TrackItem*> trackCollection;
     bool continueLoop = true;
@@ -251,7 +257,7 @@ QList<TrackItem*> LMSConnector::GetTrackCollection(int albumId)
     return trackCollection;
 }
 
-QMap<QString, QString> LMSConnector::ParseAnswer(QString response, QList<QString> knownKeys)
+QMap<QString, QString> LmsConnector::ParseAnswer(QString response, QList<QString> knownKeys)
 {
     QString currentKey;
     QMap<QString, QString> values;
@@ -272,7 +278,7 @@ QMap<QString, QString> LMSConnector::ParseAnswer(QString response, QList<QString
 }
 
 
-void LMSConnector::Play(int id, int albumId, int tracknum)
+void LmsConnector::Play(int id, int albumId, int tracknum)
 {
     QString answer = this->request(QString("%1 playlist clear").arg(this->playerId));
     QString request = QString("%1 playlistcontrol cmd:load album_id:%2 play_index:%3").arg(this->playerId, QString::number(albumId), QString::number(tracknum-1));
@@ -280,7 +286,7 @@ void LMSConnector::Play(int id, int albumId, int tracknum)
     answer = this->request(QString("%1 play").arg(this->playerId));
 }
 
-void LMSConnector::PlayAlbum(int albumId)
+void LmsConnector::PlayAlbum(int albumId)
 {
     QString answer = this->request(QString("%1 playlist clear").arg(this->playerId));
     QString request = QString("%1 playlistcontrol cmd:load album_id:%2").arg(this->playerId, QString::number(albumId));
@@ -288,71 +294,71 @@ void LMSConnector::PlayAlbum(int albumId)
     answer = this->request(QString("%1 play").arg(this->playerId));
 }
 
-void LMSConnector::PlayFavorite(const QString& id)
+void LmsConnector::PlayFavorite(const QString& id)
 {
     QString answer = this->request(QString("%1 playlist clear").arg(this->playerId));
     QString request = QString("%1 favorites playlist play item_id:%2").arg(this->playerId, id);
     answer = this->request(request);
 }
 
-void LMSConnector::Play()
+void LmsConnector::Play()
 {
     QString answer = this->request(QString("%1 play").arg(this->playerId));
 }
 
-void LMSConnector::TogglePause()
+void LmsConnector::TogglePause()
 {
     QString answer = this->request(QString("%1 pause").arg(this->playerId));
 }
 
-void LMSConnector::Stop()
+void LmsConnector::Stop()
 {
     QString answer = this->request(QString("%1 stop").arg(this->playerId));
 }
 
-void LMSConnector::Next()
+void LmsConnector::Next()
 {
     QString answer = this->request(QString("%1 playlist index +1").arg(this->playerId));
 }
 
-void LMSConnector::Previous()
+void LmsConnector::Previous()
 {
     QString answer = this->request(QString("%1 playlist index -1").arg(this->playerId));
 }
 
-void LMSConnector::SetVolume(int volume)
+void LmsConnector::SetVolume(int volume)
 {
     QString answer = this->request(QString("%1 mixer volume %2").arg(this->playerId, QString::number(volume)));
 }
 
-QString LMSConnector::GetUnknownCoverUrl()
+QString LmsConnector::GetUnknownCoverUrl()
 {
     return "http://" + address.toString() + ":9000/music/0/cover_150x150_o";
 }
 
-QString LMSConnector::GetCoverUrl(QString& coverId)
+QString LmsConnector::GetCoverUrl(QString& coverId)
 {
     return "http://" + address.toString() + ":9000/music/" + coverId + "/cover.jpg";
 }
 
-QString LMSConnector::request(QString message)
+QString LmsConnector::request(QString message)
 {
     this->write(message);
     return this->read();
 }
 
-QString LMSConnector::GetRadioCoverUrl()
+QString LmsConnector::GetRadioCoverUrl()
 {
     return "http://" + address.toString() + ":9000/html/images/radio.png";
 }
 
-void LMSConnector::write(QString message)
+void LmsConnector::write(QString message)
 {
     message.append(10);
     socket->write(message.toLatin1());
 }
 
-QString LMSConnector::read()
+QString LmsConnector::read()
 {
     char buffer[10240];
     bool fullLine = false;
@@ -384,11 +390,11 @@ QString LMSConnector::read()
     return value;
 }
 
-void LMSConnector::dataReceived()
+void LmsConnector::dataReceived()
 {
 }
 
-void LMSConnector::socketError(QAbstractSocket::SocketError socketError)
+void LmsConnector::socketError(QAbstractSocket::SocketError socketError)
 {
     qDebug() << "Error : " << socket->errorString();
     socket->close();

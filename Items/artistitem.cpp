@@ -7,14 +7,14 @@ ArtistItem::ArtistItem() : RessourceItem("")
     this->m_type = Artist;
 }
 
-ArtistItem::ArtistItem(LMSConnector* connector, const QString artistName, int artistId) : RessourceItem(artistName)
+ArtistItem::ArtistItem(LmsConnector* connector, const QString artistName, int artistId) : RessourceItem(artistName)
 {
     m_artistId = artistId;
     this->connector = connector;
     this->m_type = Artist;
 }
 
-ArtistItem::ArtistItem(LMSConnector* connector, QMap<QString, QString> tokens) : RessourceItem("")
+ArtistItem::ArtistItem(LmsConnector* connector, QMap<QString, QString> tokens) : RessourceItem("")
 {
     this->connector = connector;
     m_type = RessourceItem::Artist;
