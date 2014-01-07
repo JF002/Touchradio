@@ -121,9 +121,11 @@ int Touchradio::init()
     viewer->engine()->rootContext()->setContextProperty("statusManager", status);
     viewer->engine()->rootContext()->setContextProperty("playerController", playerController);
 
+    monitor = new Monitor(this->app);
+    viewer->engine()->rootContext()->setContextProperty("exitMonitor", monitor);
+
     QObject::connect((QObject*)viewer->engine(), SIGNAL(quit()), app, SLOT(quit()));
 
 
     return 0;
 }
-

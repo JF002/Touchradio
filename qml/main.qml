@@ -190,10 +190,8 @@ Rectangle {
                 else
                     rootRectangle.state = "PLAYBACK"
             }
-
         }
     }
-
 
     Rectangle
     {
@@ -275,10 +273,13 @@ Rectangle {
 
         RowLayout
         {
+            id: controlButtonsRectangle
             anchors.top : trackprogressBar.bottom
             anchors.topMargin: 30
+            anchors.bottom: parent.bottom
+            anchors.bottomMargin: 50
             anchors.horizontalCenter: parent.horizontalCenter
-            width: parent.width/3
+            width: parent.width / 3
 
             ImageButton {
                 Layout.fillHeight: true
@@ -286,10 +287,10 @@ Rectangle {
                 source: "../Ressources/video_previous_64.png"
                 height: 64
                 onClicked: {
-                    console.log("previous")
                     playerController.previous()
                 }
             }
+
             ImageButton {
                 Layout.fillHeight: true
                 Layout.fillWidth: true
@@ -306,6 +307,7 @@ Rectangle {
                     playerController.togglePause()
                 }
             }
+
             ImageButton {
                 Layout.fillHeight: true
                 Layout.fillWidth: true
@@ -336,16 +338,6 @@ Rectangle {
         onCloseRequest: rootRectangle.state = "PLAYBACK"
     }
 
-    /*
-    ConnectingDialog {
-        id: connectingDialog
-        height: rootRectangle.height / 4
-        width: rootRectangle.width / 4
-        anchors.centerIn: rootRectangle
-        state: "DISABLED"
-    }
-*/
-
     PowerOffDialog {
         id: powerOffDialog
         height: rootRectangle.height / 4
@@ -353,10 +345,12 @@ Rectangle {
         anchors.centerIn: rootRectangle
         state: "DISABLED"
         onExitClicked: {
-            rootRectangle.exitRequest();
+            //rootRectangle.exitRequest();
+            exitMonitor.exit()
         }
         onShutdownClicked:{
-            rootRectangle.shutdownRequest()
+            //rootRectangle.shutdownRequest()
+            exitMonitor.shutdown()
         }
         onCancelClicked: {
             rootRectangle.state = "PLAYBACK"

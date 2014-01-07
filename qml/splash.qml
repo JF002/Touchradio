@@ -7,6 +7,7 @@ import QtQuick 2.0
   */
 
 Item {
+    id: root
     width: 1280
     height: 800
 
@@ -30,7 +31,6 @@ Item {
             color: "white"
             anchors.centerIn: foregroundRectangle
         }
-
     }
 
     // This is the Loader that will load the main.qml file

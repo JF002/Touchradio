@@ -85,5 +85,4 @@ OTHER_FILES += \
     qml/LibraryItemDelegate.qml \
     qml/LibraryBrowserInfo.qml \
     qml/LibraryBrowser.qml \
-    qml/ImageButton.qml \
-    qml/ConnectingDialog.qml
+    qml/ImageButton.qml
