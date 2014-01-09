@@ -14,6 +14,7 @@ class LmsStatusThread : public QObject
 public:
     LmsStatusThread(LmsConnector* connector, LmsStatus* status);
     void Start();
+    void Stop();
 
 private slots:
     void run();

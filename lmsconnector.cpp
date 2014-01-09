@@ -51,6 +51,11 @@ void LmsConnector::moveToThread(QThread *thread)
     socket->moveToThread(thread);
 }
 
+void LmsConnector::Close()
+{
+    socket->close();
+}
+
 
 /* Get the ID (MAC address) of the player identified by index
  * @param index Index of the player

@@ -345,12 +345,10 @@ Rectangle {
         anchors.centerIn: rootRectangle
         state: "DISABLED"
         onExitClicked: {
-            //rootRectangle.exitRequest();
-            exitMonitor.exit()
+            touchradio.exit()
         }
         onShutdownClicked:{
-            //rootRectangle.shutdownRequest()
-            exitMonitor.shutdown()
+            touchradio.shutdown()
         }
         onCancelClicked: {
             rootRectangle.state = "PLAYBACK"

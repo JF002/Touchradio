@@ -22,6 +22,7 @@ public:
     LmsConnector(QObject* parent = NULL);
 
     bool connect(const QHostAddress & address, quint16 port);
+    void Close();
 
     QString GetVersion();
     int GetArtistNumber();

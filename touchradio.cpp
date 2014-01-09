@@ -15,7 +15,6 @@
 #include <QQmlEngine>
 #include <QQmlContext>
 #include <QDir>
-#include "monitor.h"
 
 Touchradio::Touchradio() : QObject()
 {
@@ -26,7 +25,6 @@ Touchradio::Touchradio() : QObject()
     status = new LmsStatus();
     statusManager = NULL;
     playerController = NULL;
-    monitor = NULL;
     rootModel = new QObjectListModel();
     viewer = new QQuickView();
 }
@@ -37,8 +35,6 @@ Touchradio::~Touchradio()
         delete statusManager;
     if(playerController != NULL)
         delete playerController;
-    if(monitor != NULL)
-        delete monitor;
     delete viewer;
     delete connector;
     delete statusConnector;
@@ -67,7 +63,6 @@ int Touchradio::Start(QGuiApplication* app)
 
 int Touchradio::init()
 {
-    qDebug() << "init";
     bool connected;
     connected = connector->connect(settings->GetLmsAddress(), settings->GetLmsPort());
     if(!connected)
@@ -76,6 +71,9 @@ int Touchradio::init()
         return 1;
     }
 
+    // TODO this socket/connector is initialised and connected in the main thread
+    // then moved to the status thread. It will be closed in the status thread.
+    // This does not seems very good...
     connected = statusConnector->connect(settings->GetLmsAddress(), settings->GetLmsPort());
     if(!connected)
     {
@@ -121,11 +119,24 @@ int Touchradio::init()
     viewer->engine()->rootContext()->setContextProperty("statusManager", status);
     viewer->engine()->rootContext()->setContextProperty("playerController", playerController);
 
-    monitor = new Monitor(this->app);
-    viewer->engine()->rootContext()->setContextProperty("exitMonitor", monitor);
-
-    QObject::connect((QObject*)viewer->engine(), SIGNAL(quit()), app, SLOT(quit()));
-
+    QObject::connect((QObject*)viewer->engine(), SIGNAL(quit()), this, SLOT(exit()));
+    QObject::connect(app, SIGNAL(aboutToQuit()), this, SLOT(exit()));
 
     return 0;
+}
+
+void Touchradio::Stop()
+{
+    statusManager->Stop();
+    connector->Close();
+}
+
+void Touchradio::exit() {
+    this->Stop();
+    this->app->exit(0);
+}
+
+void Touchradio::shutdown() {
+    this->Stop();
+    this->app->exit(1);
 }

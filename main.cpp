@@ -12,7 +12,6 @@
 #include <QHostAddress>
 #include <QDebug>
 #include <QDir>
-#include "monitor.h"
 #include "applicationsettings.h"
 #include "touchradio.h"
 #include <QQmlComponent>

@@ -9,7 +9,6 @@
 #include "lmsstatus.h"
 #include "lmsplayercontroller.h"
 #include "RessourceCenterModel.h"
-#include "monitor.h"
 
 class TouchradioWorkers;
 class Touchradio  : public QObject
@@ -18,12 +17,16 @@ class Touchradio  : public QObject
 public:
     Touchradio();
     int Start(QGuiApplication* app);
+    void Stop();
     ~Touchradio();
 
 
 
 public slots:
     int init();
+    void exit();
+
+    void shutdown();
 
 private:
     QGuiApplication* app;
@@ -36,7 +39,6 @@ private:
     LmsStatusThread* statusManager;
     LmsPlayerController* playerController;
     QObjectListModel* rootModel;
-    Monitor* monitor;
 
     // Todo The creation of RessourceItems should be reviewed...
     RessourceItem* rootItem;

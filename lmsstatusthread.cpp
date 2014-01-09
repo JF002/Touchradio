@@ -24,4 +24,12 @@ void LmsStatusThread::run()
         status->Update(answer);
         QThread::msleep(500);
     }
+    connector->Close();
+    thread.quit();
+}
+
+void LmsStatusThread::Stop()
+{
+    isRunning = false;
+    thread.wait();
 }

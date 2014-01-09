@@ -42,7 +42,6 @@ SOURCES += main.cpp \
     lmsstatus.cpp \
     lmsstatusthread.cpp \
     lmsplayercontroller.cpp \
-    monitor.cpp \
     applicationsettings.cpp \
     Exceptions/exception.cpp \
     Exceptions/timeoutexception.cpp \
@@ -61,7 +60,6 @@ HEADERS += \
     lmsconnector.h \
     lmsstatusthread.h \
     lmsplayercontroller.h \
-    monitor.h \
     applicationsettings.h \
     lmsstatus.h \
     Exceptions/exception.h \
