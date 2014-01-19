@@ -47,7 +47,7 @@ Q_SIGNALS:
 protected:
     QList<RessourceItem*> children;
     RessourceItem* parentItem;
-    virtual void FillSubItems();
+    virtual void FillSubItems() = 0;
     LmsConnector* connector;
 
     QString name;

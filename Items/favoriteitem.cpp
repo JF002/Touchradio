@@ -38,3 +38,8 @@ QString FavoriteItem::GetCoverUrl()
     return this->connector->GetRadioCoverUrl();
 }
 
+void FavoriteItem::FillSubItems()
+{
+    // Nothing to do, Favorite do not have subitems
+}
+

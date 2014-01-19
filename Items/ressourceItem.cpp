@@ -70,11 +70,6 @@ QList<RessourceItem*> RessourceItem::GetSubItems()
     return children;
 }
 
-void RessourceItem::FillSubItems()
-{
-
-}
-
 RessourceItem::ItemTypes RessourceItem::GetItemType()
 {
     return type;
@@ -88,7 +83,10 @@ void RessourceItem::AddItem(RessourceItem* item)
 
 QString RessourceItem::GetCoverUrl()
 {
-    return this->coverUrl;
+    if(connector != NULL)
+        return this->connector->GetCoverUrl(this->id);
+    else
+        return QString::null;
 }
 
 

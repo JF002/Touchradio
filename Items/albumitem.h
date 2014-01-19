@@ -17,7 +17,6 @@ public:
 
     void SetYear(int year);
     void SetArtistName(QString artist);
-
     virtual QString GetCoverUrl();
 
 public slots:

@@ -25,4 +25,10 @@ void ArtistItem::FillSubItems()
     }
 }
 
+QString ArtistItem::GetCoverUrl()
+{
+    return QString::null;
+}
+
+
 

@@ -36,14 +36,6 @@ void AlbumItem::FillSubItems()
     }
 }
 
-QString AlbumItem::GetCoverUrl()
-{
-    if(this->coverId == QString::null)
-        return connector->GetUnknownCoverUrl();
-    else
-        return connector->GetCoverUrl(this->coverId);
-}
-
 int AlbumItem::GetYear()
 {
     return this->year;
@@ -67,6 +59,14 @@ void AlbumItem::SetArtistName(QString artist)
 void AlbumItem::Play()
 {
     this->connector->PlayAlbum(this->id);
+}
+
+QString AlbumItem::GetCoverUrl()
+{
+    if(connector != NULL)
+        return this->connector->GetCoverUrl(this->coverId);
+    else
+        return QString::null;
 }
 
 

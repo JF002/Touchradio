@@ -11,6 +11,7 @@
 #include "albumitem.h"
 #include "favoriteitem.h"
 #include "artistitem.h"
+#include "simpleitem.h"
 #include "RessourceCenterModel.h"
 #include <QQmlEngine>
 #include <QQmlContext>
@@ -93,10 +94,10 @@ int Touchradio::init()
     QList<ArtistItem*> artistCollection = connector->GetArtistCollection();
     QList<FavoriteItem*> favoriteCollection = connector->GetFavoriteCollection();
 
-    rootItem = new RessourceItem(connector, "Home");
-    libraryItem = new RessourceItem(connector, "Library");
-    favoritesItem = new RessourceItem(connector, "Favorites");
-    playlistsItem = new RessourceItem(connector, "PlayLists");
+    rootItem = new SimpleItem("Home");
+    libraryItem = new SimpleItem("Library");
+    favoritesItem = new SimpleItem("Favorites");
+    playlistsItem = new SimpleItem("PlayLists");
 
     for(int i = 0; i < artistCollection.count(); i++)
     {

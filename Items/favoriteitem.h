@@ -21,6 +21,9 @@ public slots:
 Q_SIGNALS:
     void UrlChanged();
 
+protected:
+    virtual void FillSubItems();
+
 private:
     QString url;
     QString favoriteId; // Do not use ID from base class as favorites needs a string to store the ID

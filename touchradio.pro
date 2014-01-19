@@ -45,7 +45,8 @@ SOURCES += main.cpp \
     applicationsettings.cpp \
     Exceptions/exception.cpp \
     Exceptions/timeoutexception.cpp \
-    touchradio.cpp
+    touchradio.cpp \
+    Items/simpleitem.cpp
 
 
 # Installation path
@@ -69,7 +70,8 @@ HEADERS += \
     Items/favoriteitem.h \
     Items/trackitem.h \
     Items/ressourceItem.h \
-    touchradio.h
+    touchradio.h \
+    Items/simpleitem.h
 
 RESOURCES += \
     ressources.qrc

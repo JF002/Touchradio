@@ -34,6 +34,9 @@ Q_SIGNALS:
     void AlbumNameChanged();
     void YearChanged();
 
+protected:
+    virtual void FillSubItems();
+
 private:
      QString artistName;
      int albumId;

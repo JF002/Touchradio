@@ -76,16 +76,22 @@ void TrackItem::SetYear(int year)
     this->year = year;
 }
 
-QString TrackItem::GetCoverUrl()
-{
-    if(this->coverId == QString::null)
-        return connector->GetUnknownCoverUrl();
-    else
-        return connector->GetCoverUrl(this->coverId);
-}
-
 void TrackItem::Play()
 {
     this->connector->Play(this->id, this->albumId, this->trackNum);
 }
+
+void TrackItem::FillSubItems()
+{
+    // Nothing to do, Tracks do not have subitems
+}
+
+QString TrackItem::GetCoverUrl()
+{
+    if(connector != NULL)
+        return this->connector->GetCoverUrl(this->coverId);
+    else
+        return QString::null;
+}
+
 

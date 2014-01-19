@@ -12,6 +12,7 @@ class ArtistItem : public RessourceItem
 public:
     ArtistItem(LmsConnector* connector, QMap<QString, QString> tokens);
 
+    virtual QString GetCoverUrl();
 private:
     virtual void FillSubItems();
 };

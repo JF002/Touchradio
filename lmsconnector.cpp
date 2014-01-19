@@ -337,14 +337,18 @@ void LmsConnector::SetVolume(int volume)
     QString answer = this->request(QString("%1 mixer volume %2").arg(this->playerId, QString::number(volume)));
 }
 
-QString LmsConnector::GetUnknownCoverUrl()
+QString LmsConnector::GetCoverUrl(int coverId)
 {
+    if(coverId != 0) // We assume that the ID 0 will never exist...
+        return "http://" + address.toString() + ":9000/music/" + QString::number(coverId) + "/cover.jpg";
     return "http://" + address.toString() + ":9000/music/0/cover_150x150_o";
 }
 
-QString LmsConnector::GetCoverUrl(QString& coverId)
+QString LmsConnector::GetCoverUrl(QString coverId)
 {
-    return "http://" + address.toString() + ":9000/music/" + coverId + "/cover.jpg";
+    if(coverId != QString::null)
+        return "http://" + address.toString() + ":9000/music/" + coverId + "/cover.jpg";
+    return "http://" + address.toString() + ":9000/music/0/cover_150x150_o";
 }
 
 QString LmsConnector::request(QString message)

@@ -54,11 +54,11 @@ public:
 
     virtual void moveToThread(QThread *thread);
 
-    QString GetUnknownCoverUrl();
-    QString GetCoverUrl(QString& coverId);
+    QString GetCoverUrl(int coverId);
     QString GetRadioCoverUrl();
 
     QString GetLmsAddress();
+    virtual QString GetCoverUrl(QString coverId);
 
 protected:
     void write(QString message);
