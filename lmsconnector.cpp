@@ -5,9 +5,10 @@
 #include <QAbstractSocket>
 #include <QUrl>
 #include <QtDebug>
-
-#include "artistitem.h"
 #include "favoriteitem.h"
+#include "artistitem.h"
+#include "albumitem.h"
+#include "trackitem.h"
 #include "Exceptions/timeoutexception.h"
 
 LmsConnector::LmsConnector(QObject* parent):   QObject(parent)
@@ -57,9 +58,9 @@ void LmsConnector::Close()
 }
 
 
-/* Get the ID (MAC address) of the player identified by index
- * @param index Index of the player
- * @return The Identifier of the player */
+/** Get the ID (MAC address) of the player identified by index
+  * @param index Index of the player
+  * @return The Identifier of the player */
 QString LmsConnector::ReadPlayerId(int index)
 {
     /* Request : "player id 0 ?"

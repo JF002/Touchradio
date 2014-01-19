@@ -1,71 +1,47 @@
 #ifndef TRACKITEM_H
 #define TRACKITEM_H
 
-#include "lmsconnector.h"
 #include "ressourceItem.h"
-
-class LmsConnector;
-
 
 class TrackItem : public RessourceItem
 {
     Q_OBJECT
-    Q_PROPERTY(QString trackTitle READ GetTrackTitle NOTIFY TrackTitleChanged)
     Q_PROPERTY(QString artistName READ GetArtistName WRITE SetArtistName NOTIFY ArtistNameChanged)
-
     Q_PROPERTY(double duration READ GetDuration WRITE SetDuration NOTIFY DurationChanged)
     Q_PROPERTY(QString albumName READ GetAlbumName WRITE SetAlbumName NOTIFY AlbumNameChanged)
     Q_PROPERTY(int year READ GetYear WRITE SetYear NOTIFY YearChanged)
 public:
-    TrackItem();
-    TrackItem(LmsConnector* connector, int albumId, int tracknum, const QString trackName, int trackId);
-    TrackItem(LmsConnector* connector, QMap<QString, QString> tokens);
-    int GetAlbumId();
-    int GetTrackId();
-    QString GetTrackTitle();
+     TrackItem(LmsConnector* connector, QMap<QString, QString> tokens);
 
-    QString GetArtistName();
-    virtual QString GetCoverUrl();
-    double GetDuration();
-    QString GetAlbumName();
-    int GetYear();
+     QString GetArtistName();
+     double GetDuration();
+     QString GetAlbumName();
+     int GetYear();
 
-    void SetArtistName(QString artist);
-    void SetCoverId(QString coverId);
-    void SetDuration(double duration);
-    void SetAlbumName(QString album);
-    void SetYear(int year);
+     void SetArtistName(QString name);
+     void SetDuration(double duration);
+     void SetAlbumName(QString name);
+     void SetYear(int year);
 
+     virtual QString GetCoverUrl();
 
+public slots:
+     void Play();
 
 Q_SIGNALS:
-    void TrackTitleChanged();
     void ArtistNameChanged();
     void DurationChanged();
     void AlbumNameChanged();
     void YearChanged();
 
-public slots:
-    QString toString() const;
-    void Play();
-
-protected:
-    LmsConnector* connector;
-    virtual void FillSubItems();
-    void GetDetailedInfo();
-
 private:
-    int m_albumId;
-    int m_trackId;
-    int m_trackNum;
-    QString m_trackName;
-    double m_duration;
-    int m_year;
-    QString m_albumName;
-    QString m_artistName;
-    QString m_coverId;
-
-    bool detailsInfoFilled;
+     QString artistName;
+     int albumId;
+     QString albumName;
+     double duration;
+     int trackNum;
+     int year;
+     QString coverId;
 };
 
 #endif // TRACKITEM_H

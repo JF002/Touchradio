@@ -93,10 +93,10 @@ int Touchradio::init()
     QList<ArtistItem*> artistCollection = connector->GetArtistCollection();
     QList<FavoriteItem*> favoriteCollection = connector->GetFavoriteCollection();
 
-    rootItem = new RessourceItem("Home");
-    libraryItem = new RessourceItem("Library");
-    favoritesItem = new RessourceItem("Favorites");
-    playlistsItem = new RessourceItem("PlayLists");
+    rootItem = new RessourceItem(connector, "Home");
+    libraryItem = new RessourceItem(connector, "Library");
+    favoritesItem = new RessourceItem(connector, "Favorites");
+    playlistsItem = new RessourceItem(connector, "PlayLists");
 
     for(int i = 0; i < artistCollection.count(); i++)
     {

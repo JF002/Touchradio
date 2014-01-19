@@ -1,156 +1,91 @@
 #include "trackitem.h"
 
-TrackItem::TrackItem()
+/** Create a new instance of TrackItem. The instance will be initialized with
+ *  values coming from a list of keys-values.
+ *  Keys :
+ *      - id
+ *      - title
+ *      - artist
+ *      - album_id
+ *      - album
+ *      - duration
+ *      - tracknum
+ *      - year
+ *      - coverrid */
+TrackItem::TrackItem(LmsConnector* connector, QMap<QString, QString> tokens) : RessourceItem(connector, "")
 {
-    m_albumId = 0;
-    m_trackId = 0;
-    m_trackNum = 0;
-    m_trackName = "";
-    connector = NULL;
-    this->m_type = Track;
-    detailsInfoFilled = false;
-    m_coverId = QString::null;
-}
-
-TrackItem::TrackItem(LmsConnector* connector, int albumId, int trackNum, const QString trackName, int trackId): RessourceItem(trackName)
-{
-    m_albumId = albumId;
-    m_trackId = trackId;
-    m_trackName = trackName;
-    m_trackNum = trackNum;
-    this->connector = connector;
-    this->m_type = Track;
-    detailsInfoFilled = false;
-    m_coverId = QString::null;
-}
-
-TrackItem::TrackItem(LmsConnector* connector, QMap<QString, QString> tokens) : RessourceItem("")
-{
-    this->connector = connector;
-    this->m_type = Track;
+    this->type = Track;
 
     if(tokens.contains("id"))
-        m_trackId = tokens["id"].toInt();
+        this->id = tokens["id"].toInt();
     if(tokens.contains("title"))
-    {
-        m_trackName = tokens["title"];
-        m_title = m_trackName; // TODO remove redundancy between parent and children
-    }
-    /*if(tokens.contains("genre"))*/
+        this->name = tokens["title"];
     if(tokens.contains("artist"))
-        m_artistName = tokens["artist"];
+        this->artistName = tokens["artist"];
     if(tokens.contains("album_id"))
-        m_albumId = tokens["album_id"].toInt();
+        this->albumId = tokens["album_id"].toInt();
     if(tokens.contains("album"))
-        m_albumName = tokens["album"];
+        this->albumName = tokens["album"];
     if(tokens.contains("duration"))
-        m_duration = tokens["duration"].toDouble();
+        this->duration = tokens["duration"].toDouble();
     if(tokens.contains("tracknum"))
-        m_trackNum = tokens["tracknum"].toInt();
+        this->trackNum = tokens["tracknum"].toInt();
     if(tokens.contains("year"))
-        m_year = tokens["year"].toInt();
+        this->year = tokens["year"].toInt();
     if(tokens.contains("coverid"))
-        m_coverId = tokens["coverid"];
-}
-
-
-QString TrackItem::toString() const
- {
-    return QString(m_albumId) + "-" + QString(m_trackId) + "-" + m_trackName;
- }
-
-int TrackItem::GetAlbumId()
-{
-    return m_albumId;
-}
-
-int TrackItem::GetTrackId()
-{
-    return m_trackId;
-}
-
-QString TrackItem::GetTrackTitle()
-{
-    GetDetailedInfo();
-    return m_trackName;
+        this->coverId = tokens["coverid"];
 }
 
 QString TrackItem::GetArtistName()
 {
-    GetDetailedInfo();
-    return m_artistName;
-}
-
-QString TrackItem::GetCoverUrl()
-{
-    GetDetailedInfo();
-    if(m_coverId == QString::null)
-        return connector->GetUnknownCoverUrl();
-    else
-        return connector->GetCoverUrl(m_coverId);
+    return this->artistName;
 }
 
 double TrackItem::GetDuration()
 {
-    GetDetailedInfo();
-    return m_duration;
+    return this->duration;
 }
 
 QString TrackItem::GetAlbumName()
 {
-    GetDetailedInfo();
-    return m_albumName;
+    return this->albumName;
 }
 
 int TrackItem::GetYear()
 {
-    GetDetailedInfo();
-    return m_year;
+    return this->year;
 }
 
-void TrackItem::SetArtistName(QString artist)
+void TrackItem::SetArtistName(QString name)
 {
-    m_artistName = artist;
-}
-
-void TrackItem::SetCoverId(QString coverId)
-{
-    m_coverId = coverId;
-}
-
-void TrackItem::SetAlbumName(QString albumName)
-{
-    m_albumName = albumName;
-}
-
-void TrackItem::SetYear(int year)
-{
-    m_year = year;
+    this->artistName = name;
 }
 
 void TrackItem::SetDuration(double duration)
 {
-    m_duration = duration;
+    this->duration = duration;
 }
 
-void TrackItem::FillSubItems()
+void TrackItem::SetAlbumName(QString name)
 {
+    this->albumName = name;
+}
 
+void TrackItem::SetYear(int year)
+{
+    this->year = year;
+}
+
+QString TrackItem::GetCoverUrl()
+{
+    if(this->coverId == QString::null)
+        return connector->GetUnknownCoverUrl();
+    else
+        return connector->GetCoverUrl(this->coverId);
 }
 
 void TrackItem::Play()
 {
-    this->connector->Play(m_trackId, m_albumId, m_trackNum);
-}
-
-void TrackItem::GetDetailedInfo()
-{
-    /*
-    if(!detailsInfoFilled)
-    {
-        this->connector->FillTrackInfo(this);
-        detailsInfoFilled = true;
-    }
-    */
+    this->connector->Play(this->id, this->albumId, this->trackNum);
 }
 

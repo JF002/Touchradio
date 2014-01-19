@@ -25,6 +25,8 @@ public:
     //model API
     enum Roles { ObjectRole = Qt::UserRole+1 };
 
+
+
     int rowCount(const QModelIndex &parent) const;
     QVariant data(const QModelIndex &index, int role) const;
 
@@ -65,7 +67,7 @@ Q_SIGNALS:
     void currentItemNameChanged();
 
 public slots:
-    void goToSubItems(const int itemId);
+    void goToSubItems(RessourceItem* item);
     void back();
 
 protected:

@@ -3,10 +3,15 @@
 
 #include <QTcpSocket>
 #include <QHostAddress>
+
+/*
 #include "artistitem.h"
 #include "albumitem.h"
 #include "trackitem.h"
+#include "favoriteitem.h"*/
+
 #include "lmsstatus.h"
+
 
 class ArtistItem;
 class AlbumItem;

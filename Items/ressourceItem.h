@@ -3,23 +3,17 @@
 
 #include <QObject>
 #include <QTextStream>
+#include "lmsconnector.h"
 
-class RessourceItem: public QObject
+class RessourceItem : public QObject
 {
     Q_OBJECT
-    Q_PROPERTY(QString title READ GetTitle WRITE SetTitle NOTIFY TitleChanged)
-    Q_PROPERTY(int id READ GetId WRITE SetId NOTIFY IdChanged)
+    Q_PROPERTY(QString name READ GetName WRITE SetName NOTIFY NameChanged)
     Q_PROPERTY(int type READ GetItemType NOTIFY TypeChanged)
     Q_PROPERTY(QString coverUrl READ GetCoverUrl NOTIFY CoverUrlChanged)
 public:
-    RessourceItem(RessourceItem* parentItem, const QString title);
-    RessourceItem(const QString title);
-    RessourceItem(QObject* parent = 0);
-
-    enum RessourceItemRoles {
-            TitleRole = Qt::UserRole + 1,
-            IdRole
-        };
+    RessourceItem(LmsConnector* connector, RessourceItem* parentItem, const QString title);
+    RessourceItem(LmsConnector* connector, const QString title);
 
     enum ItemTypes {
         Node,
@@ -30,44 +24,38 @@ public:
     };
 
     void AddItem(RessourceItem* item);
+    QList<RessourceItem*> GetSubItems();
 
-    void SetTitle(QString title);
+    int GetId();
     void SetId(const int id);
 
-    QString GetTitle();
-    virtual QString GetCoverUrl();
-    int GetId();
-    ItemTypes GetItemType();
+    void SetName(QString name);
+    QString GetName();
 
     RessourceItem* GetParentItem();
-    QList<RessourceItem*> GetSubItems();
     void SetParentItem(RessourceItem*);
 
+    ItemTypes GetItemType();
+
+    virtual QString GetCoverUrl();
+
 Q_SIGNALS:
-    void TitleChanged();
-    void IdChanged();
+    void NameChanged();
     void TypeChanged();
     void CoverUrlChanged();
 
-public slots:
-    QString toString() const;
-
 protected:
-    virtual void FillSubItems();
-    QHash<int, QByteArray> roleNames() const;
-    QString m_title;
     QList<RessourceItem*> children;
-    ItemTypes m_type;
-    QString m_cover;
+    RessourceItem* parentItem;
+    virtual void FillSubItems();
+    LmsConnector* connector;
 
-private:
-    RessourceItem* m_parentItem;
-
-
-
-    int m_id;
-
+    QString name;
+    ItemTypes type;
+    QString coverUrl;
+    int id;
 };
+
 
 #endif // RESSOURCEITEM_H
 

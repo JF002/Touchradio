@@ -4,7 +4,7 @@
 #include <QObject>
 #include <QString>
 #include <QList>
-#include "trackitem.h"
+//#include "trackitem.h"
 
 class LmsStatus: public QObject
 {

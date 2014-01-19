@@ -136,7 +136,7 @@ Item {
 
             clip: true
             delegate: LibraryItemDelegate {
-                text: object.title
+                text: object.name
                 cover: (object.coverUrl)?object.coverUrl:"../Ressources/disk_48.png"
                 onClicked:
                 {
@@ -147,7 +147,8 @@ Item {
                     else if(object.type == 2)
                     {
                         infoRectangle.album = object
-                        listview.model.goToSubItems(object.id);
+                        //listview.model.goToSubItems(object.id);
+                        listview.model.goToSubItems(object);
                         listview.positionViewAtBeginning();
                     }
                     else if(object.type == 4)
@@ -156,7 +157,8 @@ Item {
                     }
                     else
                     {
-                        listview.model.goToSubItems(object.id);
+                        //listview.model.goToSubItems(object.id);
+                        listview.model.goToSubItems(object);
                         listview.positionViewAtBeginning();
                     }
                 }

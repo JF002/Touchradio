@@ -65,21 +65,13 @@ QHash<int, QByteArray> QObjectListModel::roleNames() const {
     return roles;
 }
 
-
-void QObjectListModel::goToSubItems(const int itemId) {
-
-    foreach( QObject* item, m_objects )
+void QObjectListModel::goToSubItems(RessourceItem* item)
+{
+    this->clear();
+    this->currentItem = item;
+    foreach( RessourceItem* item2, item->GetSubItems())
     {
-        RessourceItem* rItem = (RessourceItem*)item;
-        if(rItem->GetId() == itemId)
-        {
-            this->clear();
-            this->currentItem = rItem;
-            foreach( RessourceItem* item2, rItem->GetSubItems())
-            {
-                this->append(item2);
-            }
-        }
+        this->append(item2);
     }
     emit currentItemNameChanged();
 }
@@ -87,7 +79,7 @@ void QObjectListModel::goToSubItems(const int itemId) {
 QString QObjectListModel::GetCurrentItemName()
 {
     if(currentItem != NULL)
-        return currentItem->GetTitle();
+        return currentItem->GetName();
     else
         return "Main";
 }

@@ -99,7 +99,7 @@ Rectangle {
             color:"transparent"
             Text {
                 id: favoriteTitleText
-                text: favorite!=null?favorite.title:""
+                text: favorite!=null?favorite.name:""
                 font.pixelSize: 40
                 anchors.horizontalCenter: favoriteTitleTextRectangle.horizontalCenter
                 anchors.verticalCenter: favoriteTitleTextRectangle.verticalCenter
@@ -165,7 +165,7 @@ Rectangle {
             color:"transparent"
             Text {
                 id: titleText
-                text: album!=null?album.albumTitle:""
+                text: album!=null?album.name:""
                 font.pixelSize: 40
                 anchors.horizontalCenter: titleTextRectangle.horizontalCenter
                 anchors.verticalCenter: titleTextRectangle.verticalCenter
@@ -231,7 +231,7 @@ Rectangle {
             color:"transparent"
             Text {
                 id: trackTtitleText
-                text: track!=null?track.trackTitle:""
+                text: track!=null?track.name:""
                 font.pixelSize: 40
                 anchors.horizontalCenter: trackTitleTextRectangle.horizontalCenter
                 anchors.verticalCenter: trackTitleTextRectangle.verticalCenter

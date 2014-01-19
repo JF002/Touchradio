@@ -2,33 +2,64 @@
 
 #include "ressourceItem.h"
 
-RessourceItem::RessourceItem(QObject* parent)
+/** Create a new instance of RessourceItem, specifying the parent item and the name. */
+RessourceItem::RessourceItem(LmsConnector* connector, RessourceItem* parentItem, const QString name) : QObject(NULL)
 {
-    this->m_title = "";
-    this->m_id = 0;
-    this->m_type = Node;
-    this->m_parentItem = NULL;
-    this->m_cover = QString::null;
+    this->parentItem = parentItem;
+    this->name = name;
+    this->id = 0;
+    this->type = Node;
+    this->coverUrl = QString::null;
+    this->connector = connector;
 }
 
-RessourceItem::RessourceItem(RessourceItem* parentItem, const QString title)
+/** Create a new instance of RessourceItem, specifying the name. Parent is set to NULL. */
+RessourceItem::RessourceItem(LmsConnector* connector, const QString name) : QObject(NULL)
 {
-    m_parentItem = parentItem;
-    this->m_title = title;
-    this->m_id = 0;
-    this->m_type = Node;
-    this->m_cover = QString::null;
+    this->name = name;
+    this->id = 0;
+    this->type = Node;
+    this->parentItem = NULL;
+    this->coverUrl = QString::null;
+    this->connector = connector;
 }
 
-RessourceItem::RessourceItem(const QString title)
+/** Set the ID of the instance. The ID is a unique identifier */
+void RessourceItem::SetId(int id)
 {
-    this->m_title = title;
-    this->m_id = 0;
-    this->m_type = Node;
-    this->m_parentItem = NULL;
-    this->m_cover = QString::null;
+    this->id = id;
 }
 
+/** Return the ID of the instance. The ID is a unique identifier */
+int RessourceItem::GetId()
+{
+    return this->id;
+}
+
+/** Set the name */
+void RessourceItem::SetName(QString name)
+{
+    this->name = name;
+}
+
+/** Return the name */
+QString RessourceItem::GetName()
+{
+    return this->name;
+}
+
+/** Return the parent item of this item */
+RessourceItem* RessourceItem::GetParentItem()
+{
+    return this->parentItem;
+}
+
+void RessourceItem::SetParentItem(RessourceItem* parentItem)
+{
+    this->parentItem = parentItem;
+}
+
+/** Return the list of sub-items of this instance. */
 QList<RessourceItem*> RessourceItem::GetSubItems()
 {
     if(children.count() == 0)
@@ -44,62 +75,20 @@ void RessourceItem::FillSubItems()
 
 }
 
-void RessourceItem::SetTitle(QString title)
+RessourceItem::ItemTypes RessourceItem::GetItemType()
 {
-    m_title = title;
-}
-QString RessourceItem::GetTitle()
-{
-    return m_title;
+    return type;
 }
 
 void RessourceItem::AddItem(RessourceItem* item)
 {
-    item->SetId(children.count());
     item->SetParentItem(this);
-    children << item;
-}
-
-void RessourceItem::SetId(int id)
-{
-    m_id = id;
+    this->children << item;
 }
 
 QString RessourceItem::GetCoverUrl()
 {
-    return m_cover;
-}
-
-void RessourceItem::SetParentItem(RessourceItem* parentItem)
-{
-    this->m_parentItem = parentItem;
-}
-
-RessourceItem* RessourceItem::GetParentItem()
-{
-    return m_parentItem;
-}
-
-QHash<int, QByteArray> RessourceItem::roleNames() const {
-    QHash<int, QByteArray> roles;
-    roles[TitleRole] = "title";
-    roles[IdRole] = "id";
-    return roles;
-}
-
-int RessourceItem::GetId()
-{
-    return m_id;
-}
-
-QString RessourceItem::toString() const
- {
-     return m_title;
- }
-
-RessourceItem::ItemTypes RessourceItem::GetItemType()
-{
-    return m_type;
+    return this->coverUrl;
 }
 
 

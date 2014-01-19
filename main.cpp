@@ -9,6 +9,7 @@
 #include "lmsstatusthread.h"
 #include "artistitem.h"
 #include "favoriteitem.h"
+#include "trackitem.h"
 #include <QHostAddress>
 #include <QDebug>
 #include <QDir>
