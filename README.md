@@ -4,6 +4,8 @@ Touchradio
 
 Touchradio offers a modern and fluid user interface, designed to be used with a touchscreen allowing to control a player connected to a server Logitech Media Server.
 
+For more information, see [the project page on my website](https://codingfield.com/projects/touchradio).
+
 ------------
 Key features
 ------------
